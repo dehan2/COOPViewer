@@ -47,7 +47,10 @@
     <ClCompile Include="RSOManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="COOPWidget.cpp">
+    <ClCompile Include="COOPViewerWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MinimalRSO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -58,15 +61,16 @@
     <ClInclude Include="RSOManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="constForCOOP.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MinimalRSO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="COOPWidget.h">
+    <QtMoc Include="COOPViewerWidget.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-  </ItemGroup>
-  <ItemGroup>
-    <QtUic Include="COOPWidget.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
   </ItemGroup>
 </Project>

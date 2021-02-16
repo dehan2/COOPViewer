@@ -35,12 +35,12 @@ const float INITIAL_SEARCH_INTERVAL = 1;
 const int MAX_SEARCH_ITERATION = 100;
 const float INTERVAL_EPSILON = 0.01;
 
-class OrbitalBall;
+class ResidentSpaceObject;
 
 struct SegmentTransitionEvent
 {
 	double time;
-	OrbitalBall* ball;
+	ResidentSpaceObject* ball;
 };
 
 
@@ -66,7 +66,8 @@ const int MANEUVER_ANGLE_INCREMENT = 1;
 struct PredictionCommand
 {
 	string directory, tleFile;
-	int numObject, numLineSegments, predictionTimeWindow;
+	int numObject, numLineSegments;
+	float predictionTimeWindow, cutoffValue;
 	int year, month, day, hour, min, sec;
 };
 

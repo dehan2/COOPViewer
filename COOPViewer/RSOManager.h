@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ResidentSpaceObject.h"
+#include "MinimalRSO.h"
 #include "constForCOOP.h"
 
 #include <list>
@@ -13,13 +13,13 @@ using namespace std;
 class RSOManager
 {
 private:
-	list<ResidentSpaceObject> m_RSOs;
+	list<MinimalRSO> m_RSOs;
 	
 	list<elsetrec> m_TLEData;
 	list<cSatellite> m_satellites;
 	int m_numSegments;
 
-	map<int, ResidentSpaceObject*> m_mapFromIDToOrbitalBall;
+	map<int, MinimalRSO*> m_mapFromIDToRSO;
 
 	cJulian m_COOPEpoch;
 
@@ -28,23 +28,26 @@ private:
 	int m_targetCatalogID;
 	list<pair<rg_Point3D, tm>> m_wayPoints;
 
+	PredictionCommand m_command;
+
 public:
 	RSOManager() = default;
 	~RSOManager() {	clear();	};
 
 	void clear();
 
-	list<ResidentSpaceObject>& get_RSOs() { return m_RSOs; }
+	list<MinimalRSO>& get_RSOs() { return m_RSOs; }
 	inline const cJulian& get_epoch() { return m_COOPEpoch; }
 
+	void read_prediction_command_file(const string& filePath);
 	void initialize_RSO_manager(const PredictionCommand& command);
 
 	void load_two_line_element_set_file(const string& filePath, const int& numObjects);
 	elsetrec convert_TLE_to_elsetrec(char* longstr1, char* longstr2);
 	
-	ResidentSpaceObject* find_RSO_from_ID(const int& ID) { return m_mapFromIDToOrbitalBall.at(ID); }
-	ResidentSpaceObject* find_RSO_that_has_eccentricity_similar_to_given(const double& targetEccentricity);
-	list<array<ResidentSpaceObject*, 2>> find_danger_close_pairs(const double& threshold);
+	MinimalRSO* find_RSO_from_ID(const int& ID) { return m_mapFromIDToRSO.at(ID); }
+	MinimalRSO* find_RSO_that_has_eccentricity_similar_to_given(const double& targetEccentricity);
+	list<array<MinimalRSO*, 2>> find_danger_close_pairs(const double& threshold);
 
 	void save_RSO_infos(const string& filePath);
 

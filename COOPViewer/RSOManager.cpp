@@ -12,6 +12,70 @@ void RSOManager::clear()
 
 
 
+
+void RSOManager::read_prediction_command_file(const string& filePath)
+{
+	ifstream fin;
+	fin.open(filePath);
+
+	if (fin.is_open())
+	{
+		while (!fin.eof())
+		{
+			char lineData[256];
+			fin.getline(lineData, 256);
+
+			if (lineData[0] != '#')
+			{
+				char* context;
+				string delimiter = " \t";
+
+				string token = strtok_s(lineData, delimiter.c_str(), &context);
+				m_command.directory = token;
+
+				token = strtok_s(NULL, delimiter.c_str(), &context);
+				m_command.tleFile = token;
+
+				token = strtok_s(NULL, delimiter.c_str(), &context);
+				m_command.numObject = stoi(token);
+
+				token = strtok_s(NULL, delimiter.c_str(), &context);
+				m_command.numLineSegments = stoi(token);
+
+				token = strtok_s(NULL, delimiter.c_str(), &context);
+				m_command.cutoffValue = stof(token);
+
+				token = strtok_s(NULL, delimiter.c_str(), &context);
+				m_command.predictionTimeWindow = stoi(token);
+
+				token = strtok_s(NULL, delimiter.c_str(), &context);
+				m_command.year = stoi(token);
+
+				token = strtok_s(NULL, delimiter.c_str(), &context);
+				m_command.month = stoi(token);
+
+				token = strtok_s(NULL, delimiter.c_str(), &context);
+				m_command.day = stoi(token);
+
+				token = strtok_s(NULL, delimiter.c_str(), &context);
+				m_command.hour = stoi(token);
+
+				token = strtok_s(NULL, delimiter.c_str(), &context);
+				m_command.min = stoi(token);
+
+				token = strtok_s(NULL, delimiter.c_str(), &context);
+				m_command.sec = stoi(token);
+			}
+		}
+	}
+
+	fin.close();
+
+	initialize_RSO_manager(m_command);
+}
+
+
+
 void RSOManager::initialize_RSO_manager(const PredictionCommand& command)
 {
 	string filePath = command.directory + command.tleFile;
@@ -24,8 +88,8 @@ void RSOManager::initialize_RSO_manager(const PredictionCommand& command)
 	auto itForTLEData = m_TLEData.begin();
 	for (auto& satellite : m_satellites)
 	{
-		m_RSOs.push_back(ResidentSpaceObject(index, m_numSegments, &satellite, &m_COOPEpoch, &*itForTLEData));
-		m_mapFromIDToOrbitalBall[stoi(m_RSOs.back().get_satellite()->Orbit().SatId())] = &m_RSOs.back();
+		m_RSOs.push_back(MinimalRSO(index, m_numSegments, &satellite, &m_COOPEpoch, &*itForTLEData));
+		m_mapFromIDToRSO[stoi(m_RSOs.back().get_satellite()->Orbit().SatId())] = &m_RSOs.back();
 		index++;
 		itForTLEData++;
 	}
@@ -190,9 +254,9 @@ elsetrec RSOManager::convert_TLE_to_elsetrec(char* longstr1, char* longstr2)
 
 
 
-ResidentSpaceObject* RSOManager::find_RSO_that_has_eccentricity_similar_to_given(const double& targetEccentricity)
+MinimalRSO* RSOManager::find_RSO_that_has_eccentricity_similar_to_given(const double& targetEccentricity)
 {
-	ResidentSpaceObject* ballWithClosestEccentricity = nullptr;
+	MinimalRSO* ballWithClosestEccentricity = nullptr;
 	double minEccentricityDifference = DBL_MAX;
 	for (auto& ball : m_RSOs)
 	{
@@ -210,12 +274,12 @@ ResidentSpaceObject* RSOManager::find_RSO_that_has_eccentricity_similar_to_given
 
 
 
-list<array<ResidentSpaceObject*, 2>> RSOManager::find_danger_close_pairs(const double& threshold)
+list<array<MinimalRSO*, 2>> RSOManager::find_danger_close_pairs(const double& threshold)
 {
-	list<array<ResidentSpaceObject*, 2>> dangerClosePairs;
-	for (list<ResidentSpaceObject>::iterator it1 = m_RSOs.begin(); it1 != m_RSOs.end(); it1++)
+	list<array<MinimalRSO*, 2>> dangerClosePairs;
+	for (list<MinimalRSO>::iterator it1 = m_RSOs.begin(); it1 != m_RSOs.end(); it1++)
 	{
-		for (list<ResidentSpaceObject>::iterator it2 = next(it1); it2 != m_RSOs.end(); it2++)
+		for (list<MinimalRSO>::iterator it2 = next(it1); it2 != m_RSOs.end(); it2++)
 		{
 			float distance = (*it1).get_coord().distance((*it2).get_coord());
 			if (distance < threshold)
@@ -317,8 +381,8 @@ void RSOManager::generate_maneuver_plan(const int& targetCatalogID, const double
 	m_targetCatalogID = targetCatalogID;
 	m_wayPoints.clear();
 
-	ResidentSpaceObject* targetRSO = m_mapFromIDToOrbitalBall.at(targetCatalogID);
-	rg_Point3D initLocation = targetRSO->calculate_point_on_Kepler_orbit_at_time(startTime);
+	MinimalRSO* targetRSO = m_mapFromIDToRSO.at(targetCatalogID);
+	rg_Point3D initLocation = targetRSO->calculate_coord_at_given_moment(startTime);
 
 	rg_TMatrix3D rotationMat;
 	rotationMat.rotateArbitraryAxis(initLocation, rotationAngle);
@@ -330,7 +394,7 @@ void RSOManager::generate_maneuver_plan(const int& targetCatalogID, const double
 	for (int i = 1; i <= numSegments; i++)
 	{
 		double currTime = startTime + i * secondsPerSegment;
-		rg_Point3D rotatedCoord = rotationMat * targetRSO->calculate_point_on_Kepler_orbit_at_time(currTime);
+		rg_Point3D rotatedCoord = rotationMat * targetRSO->calculate_coord_at_given_moment(currTime);
 		m_wayPoints.push_back(make_pair(rotatedCoord, convert_seconds_to_tmStruct(m_COOPEpoch, currTime)));
 	}
 }
@@ -367,8 +431,8 @@ pair<double, double> RSOManager::find_time_of_closest_approach_for_RSO_pair(int 
 	double startTime = targetTime - searchInterval;
 	double endTime = targetTime + searchInterval;
 
-	ResidentSpaceObject* primary = m_mapFromIDToOrbitalBall.at(primaryID);
-	ResidentSpaceObject* secondary = m_mapFromIDToOrbitalBall.at(secondaryID);
+	MinimalRSO* primary = m_mapFromIDToRSO.at(primaryID);
+	MinimalRSO* secondary = m_mapFromIDToRSO.at(secondaryID);
 
 	double TCA = DBL_MAX;
 	double minDistance = DBL_MAX;
@@ -376,8 +440,8 @@ pair<double, double> RSOManager::find_time_of_closest_approach_for_RSO_pair(int 
 	double currTime = startTime;
 	while (currTime <= endTime)
 	{
-		rg_Point3D primaryCoord = primary->calculate_point_on_Kepler_orbit_at_time(currTime);
-		rg_Point3D secondaryCoord = secondary->calculate_point_on_Kepler_orbit_at_time(currTime);
+		rg_Point3D primaryCoord = primary->calculate_coord_at_given_moment(currTime);
+		rg_Point3D secondaryCoord = secondary->calculate_coord_at_given_moment(currTime);
 		double distance = primaryCoord.distance(secondaryCoord);
 
 		if (distance < minDistance)
