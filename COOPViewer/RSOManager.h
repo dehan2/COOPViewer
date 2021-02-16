@@ -15,13 +15,13 @@ class RSOManager
 private:
 	list<MinimalRSO> m_RSOs;
 	
-	list<elsetrec> m_TLEData;
+	list<elsetrec> m_TLEFileInfos;
 	list<cSatellite> m_satellites;
 	int m_numSegments;
 
 	map<int, MinimalRSO*> m_mapFromIDToRSO;
 
-	cJulian m_COOPEpoch;
+	cJulian m_startMomentOfPredictionTimeWindow;
 
 	map<int, double> m_mapFromIDToVelocityUpdatedTime;
 
@@ -37,7 +37,7 @@ public:
 	void clear();
 
 	list<MinimalRSO>& get_RSOs() { return m_RSOs; }
-	inline const cJulian& get_epoch() { return m_COOPEpoch; }
+	inline const cJulian& get_epoch() { return m_startMomentOfPredictionTimeWindow; }
 
 	void read_prediction_command_file(const string& filePath);
 	void initialize_RSO_manager(const PredictionCommand& command);
