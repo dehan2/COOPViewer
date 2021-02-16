@@ -79,6 +79,7 @@ struct PredictionCommand
 const char OPS_MODE = 'i';
 const gravconsttype GRAV_CONST_TYPE = wgs84;
 
+const float OVERLAP_THRESHOLD = 1.0e-3;
 
 struct OutlierInfo
 {

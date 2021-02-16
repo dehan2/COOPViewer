@@ -45,6 +45,8 @@ public:
 	void load_two_line_element_set_file(const string& filePath, const int& numObjects);
 	elsetrec convert_TLE_to_elsetrec(char* longstr1, char* longstr2);
 	
+	int filter_invalid_TLEs();
+
 	MinimalRSO* find_RSO_from_ID(const int& ID) { return m_mapFromIDToRSO.at(ID); }
 	MinimalRSO* find_RSO_that_has_eccentricity_similar_to_given(const double& targetEccentricity);
 	list<array<MinimalRSO*, 2>> find_danger_close_pairs(const double& threshold);

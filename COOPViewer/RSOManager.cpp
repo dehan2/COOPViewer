@@ -85,6 +85,8 @@ void RSOManager::initialize_RSO_manager(const PredictionCommand& command)
 	m_numSegments = command.numLineSegments;
 	m_startMomentOfPredictionTimeWindow = cJulian(command.year, command.month, command.day, command.hour, command.min, command.sec);
 
+	int numFilteredTLE = filter_invalid_TLEs();
+
 	auto itForTLEData = m_TLEFileInfos.begin();
 	for (auto& satellite : m_satellites)
 	{
@@ -259,27 +261,15 @@ int RSOManager::filter_invalid_TLEs()
 	list<rg_Point3D> coordOfRSOs;
 	auto itForTLEData = m_TLEFileInfos.begin();
 
-
-
-	auto itForTLEData = m_TLEFileInfos.begin();
-	for (auto& satellite : m_satellites)
-	{
-		m_RSOs.push_back(MinimalRSO(index, m_numSegments, &satellite, &m_startMomentOfPredictionTimeWindow, &*itForTLEData));
-		m_mapFromIDToRSO[stoi(m_RSOs.back().get_satellite()->Orbit().SatId())] = &m_RSOs.back();
-		index++;
-		itForTLEData++;
-	}
-
-
 	int numFilteredRSOs = 0;
 	while (itForTLEData != m_TLEFileInfos.end())
 	{
-		double secFromSatEpochToPredictionStartTime = (m_startMomentOfPredictionTimeWindow.Date() - (*itForTLEData).SGP4_06Info.jdsatepoch) * 1440;
+		double secFromSatEpochToPredictionStartTime = (m_startMomentOfPredictionTimeWindow.Date() - (*itForTLEData).jdsatepoch) * 1440;
 
 		double coordArray[3];
 		double velocityArray[3];
 
-		bool sgp4Result = sgp4(GRAV_CONST_TYPE, (*itForTLEData).SGP4_06Info, secFromSatEpochToPredictionStartTime, coordArray, velocityArray);
+		bool sgp4Result = sgp4(GRAV_CONST_TYPE, *itForTLEData, secFromSatEpochToPredictionStartTime, coordArray, velocityArray);
 		if (sgp4Result == true)
 		{
 			rg_Point3D coord(coordArray[0], coordArray[1], coordArray[2]);
@@ -301,16 +291,16 @@ int RSOManager::filter_invalid_TLEs()
 			}
 			else
 			{
-				if (PRINT_PROGRESS_LEVEL >= 1)
-					cout << "RSO " << (*itForTLEData).SGP4_80Info.Orbit().SatId() << "(" << (*itForTLEData).SGP4_80Info.Name() << ") is overlapped to other RSO" << endl;
+				//if (PRINT_PROGRESS_LEVEL >= 1)
+				//	cout << "RSO " << (*itForTLEData).SGP4_80Info.Orbit().SatId() << "(" << (*itForTLEData).SGP4_80Info.Name() << ") is overlapped to other RSO" << endl;
 
 				itForTLEData = m_TLEFileInfos.erase(itForTLEData);
 			}
 		}
 		else
 		{
-			if (PRINT_PROGRESS_LEVEL >= 1)
-				cout << "RSO " << (*itForTLEData).SGP4_80Info.Orbit().SatId() << "(" << (*itForTLEData).SGP4_80Info.Name() << ") is not fit for SGP4" << endl;
+			//if (PRINT_PROGRESS_LEVEL >= 1)
+			//	cout << "RSO " << (*itForTLEData).SGP4_80Info.Orbit().SatId() << "(" << (*itForTLEData).SGP4_80Info.Name() << ") is not fit for SGP4" << endl;
 			itForTLEData = m_TLEFileInfos.erase(itForTLEData);
 			++numFilteredRSOs;
 		}
