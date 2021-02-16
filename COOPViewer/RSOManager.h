@@ -49,6 +49,8 @@ public:
 	MinimalRSO* find_RSO_that_has_eccentricity_similar_to_given(const double& targetEccentricity);
 	list<array<MinimalRSO*, 2>> find_danger_close_pairs(const double& threshold);
 
+	void update_RSO_statuses_to_given_moment(const double& givenMoment);
+
 	void save_RSO_infos(const string& filePath);
 
 	void generate_maneuver_plan(const int& targetCatalogID, const double& rotationAngle, const double& startTime, const double& endTime, const int& numSegments);

@@ -50,7 +50,7 @@ public:
 	inline void set_velocity(const rg_Point3D& velocity) { m_velocity = velocity; }
 
 
-	void update_state_to_given_moment(const double& givenMoment);
+	void update_status_to_given_moment(const double& givenMoment);
 	rg_Point3D calculate_coord_at_given_moment(double givenMoment) const;
 };
 

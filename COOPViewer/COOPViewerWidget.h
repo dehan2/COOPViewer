@@ -16,6 +16,8 @@ public:
 	explicit COOPViewerWidget(QWidget* parent = 0);
 	virtual ~COOPViewerWidget();
 
+	void set_manager(RSOManager* manager) { pManager = manager; }
+
 	virtual void draw();
 
 	virtual void mousePressEvent(QMouseEvent* event);

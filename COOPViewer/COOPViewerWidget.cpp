@@ -6,7 +6,7 @@
 COOPViewerWidget::COOPViewerWidget(QWidget* parent)
 	: VDRCOpenGLWidget(parent)
 {
-	set_eye_distance(1000);
+	set_eye_distance(200);
 }
 
 COOPViewerWidget::~COOPViewerWidget()
@@ -23,7 +23,11 @@ void COOPViewerWidget::draw()
 
 	if (pManager != nullptr && pManager->get_RSOs().empty() == false)
 	{
-		for()
+		for (auto& rso : pManager->get_RSOs())
+		{
+			rg_Point3D& coord = rso.get_coord();
+			draw_sphere(coord / 100, 1, GREEN);
+		}
 	}
 }
 
@@ -41,5 +45,5 @@ void COOPViewerWidget::process_picking(const int& hits, const GLuint* selectBuff
 
 void COOPViewerWidget::update()
 {
-
+	draw();
 }

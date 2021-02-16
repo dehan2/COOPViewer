@@ -85,7 +85,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QDateTimeEdit" name="dateTimeEdit">
+              <widget class="QDateTimeEdit" name="dateTimeEdit_currTime">
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
                </property>
@@ -236,5 +236,42 @@
  <resources>
   <include location="COOPViewer.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>pushButton_load_prediction_command</sender>
+   <signal>clicked()</signal>
+   <receiver>COOPViewerClass</receiver>
+   <slot>load_prediction_command()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>903</x>
+     <y>111</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1097</x>
+     <y>72</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_play</sender>
+   <signal>clicked()</signal>
+   <receiver>COOPViewerClass</receiver>
+   <slot>play_simulation()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>940</x>
+     <y>197</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1102</x>
+     <y>199</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>load_prediction_command()</slot>
+  <slot>play_simulation()</slot>
+ </slots>
 </ui>

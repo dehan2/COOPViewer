@@ -293,6 +293,14 @@ list<array<MinimalRSO*, 2>> RSOManager::find_danger_close_pairs(const double& th
 
 
 
+void RSOManager::update_RSO_statuses_to_given_moment(const double& givenMoment)
+{
+	for (auto& rso : m_RSOs)
+		rso.update_status_to_given_moment(givenMoment);
+}
+
+
+
 void RSOManager::save_RSO_infos(const string& filePath)
 {
 	ofstream RSOInfoFile(filePath);

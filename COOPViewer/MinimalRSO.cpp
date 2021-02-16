@@ -15,7 +15,7 @@ MinimalRSO::MinimalRSO(int ID, int numSegments, cSatellite* satellite, cJulian* 
 	m_COOPEpoch = localEpoch;
 	m_TLEData = TLEData;
 
-	update_state_to_given_moment(0.0);
+	update_status_to_given_moment(0.0);
 }
 
 
@@ -67,7 +67,7 @@ void MinimalRSO::clear()
 
 
 
-void MinimalRSO::update_state_to_given_moment(const double& givenMoment)
+void MinimalRSO::update_status_to_given_moment(const double& givenMoment)
 {
 	cJulian targetTime = *m_COOPEpoch;
 	targetTime.AddSec(givenMoment);

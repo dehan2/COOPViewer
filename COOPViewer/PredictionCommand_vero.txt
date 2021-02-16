@@ -1,2 +1,2 @@
 # Directory TLEFile NumObjects NumLineSeg TimeWindow EpochYear Mon Day Hour Min Sec 
-D:\Coding\BenchmarkTest_201109\LEO_1109_1100\ LEO_Nov9_2020_1100UCT_4137.tle 100 1000 1.0e-3 3600 2020 11 10 0 0 0 
+.\ LEO_Nov9_2020_1100UCT_4137.tle 100 1000 1.0e-3 3600 2020 11 10 0 0 0 
