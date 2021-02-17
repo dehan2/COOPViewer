@@ -53,6 +53,6 @@ void COOPViewer::update_time_info()
 	cJulian julianTime = m_manager.get_epoch();
 	julianTime.AddSec(m_currentTime);
 
-	QDate date;
-	date.setDate(julianTime)
+	//QDate date;
+	//date.setDate(julianTime);
 }

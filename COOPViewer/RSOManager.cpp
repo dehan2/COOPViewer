@@ -180,7 +180,6 @@ void RSOManager::load_two_line_element_set_file(const string& filePath, const in
 			firstLine = firstLine.substr(pos + delimiter.length());
 			cTle tleSGP4(firstLine, secondLine, thirdLine);
 			cSatellite satSGP4(tleSGP4);
-			m_satellites.push_back(satSGP4);
 
 			char c_secondLine[130];
 			char c_thirdLine[130];
@@ -188,12 +187,13 @@ void RSOManager::load_two_line_element_set_file(const string& filePath, const in
 			strcpy(c_secondLine, secondLine.c_str());
 			strcpy(c_thirdLine, thirdLine.c_str());
 			elsetrec currData = convert_TLE_to_elsetrec(c_secondLine, c_thirdLine);
-			m_TLEData.push_back(currData);
+			m_TLEFileInfos.push_back({ currData, satSGP4 });
 		}
 		else
 		{
 			break;
 		}
+	}
 
 	fin.close();
 }
