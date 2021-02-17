@@ -81,19 +81,16 @@ void RSOManager::initialize_RSO_manager(const PredictionCommand& command)
 	string filePath = command.directory + command.tleFile;
 	load_two_line_element_set_file(filePath, command.numObject);
 
-	int index = BEGINNING_ID_OF_ORBIT_BALL;
 	m_numSegments = command.numLineSegments;
 	m_startMomentOfPredictionTimeWindow = cJulian(command.year, command.month, command.day, command.hour, command.min, command.sec);
 
 	int numFilteredTLE = filter_invalid_TLEs();
 
-	auto itForTLEData = m_TLEFileInfos.begin();
-	for (auto& satellite : m_satellites)
+	for (auto& TLEInfo : m_TLEFileInfos)
 	{
-		m_RSOs.push_back(MinimalRSO(index, m_numSegments, &satellite, &m_startMomentOfPredictionTimeWindow, &*itForTLEData));
-		m_mapFromIDToRSO[stoi(m_RSOs.back().get_satellite()->Orbit().SatId())] = &m_RSOs.back();
-		index++;
-		itForTLEData++;
+		int catalogID = stoi(TLEInfo.SGP4_80Info.Orbit().SatId());
+		m_RSOs.push_back(MinimalRSO(catalogID, m_numSegments, &TLEInfo.SGP4_80Info, &m_startMomentOfPredictionTimeWindow, &TLEInfo.SGP4_06Info));
+		m_mapFromIDToRSO[catalogID] = &m_RSOs.back();
 	}
 
 #ifdef CHECK_TLE
@@ -129,7 +126,6 @@ void RSOManager::load_two_line_element_set_file(const string& filePath, const in
 		firstLine = firstLine.substr(pos + delimiter.length());
 		cTle tleSGP4(firstLine, secondLine, thirdLine);
 		cSatellite satSGP4(tleSGP4);
-		m_satellites.push_back(satSGP4);
 
 		char c_secondLine[130];
 		char c_thirdLine[130];
@@ -137,7 +133,7 @@ void RSOManager::load_two_line_element_set_file(const string& filePath, const in
 		strcpy(c_secondLine, secondLine.c_str());
 		strcpy(c_thirdLine, thirdLine.c_str());
 		elsetrec currData = convert_TLE_to_elsetrec(c_secondLine, c_thirdLine);
-		m_TLEFileInfos.push_back(currData);
+		m_TLEFileInfos.push_back({ currData, satSGP4 });
 	}
 
 	fin.close();
@@ -264,12 +260,12 @@ int RSOManager::filter_invalid_TLEs()
 	int numFilteredRSOs = 0;
 	while (itForTLEData != m_TLEFileInfos.end())
 	{
-		double secFromSatEpochToPredictionStartTime = (m_startMomentOfPredictionTimeWindow.Date() - (*itForTLEData).jdsatepoch) * 1440;
+		double secFromSatEpochToPredictionStartTime = (m_startMomentOfPredictionTimeWindow.Date() - (*itForTLEData).SGP4_06Info.jdsatepoch) * 1440;
 
 		double coordArray[3];
 		double velocityArray[3];
 
-		bool sgp4Result = sgp4(GRAV_CONST_TYPE, *itForTLEData, secFromSatEpochToPredictionStartTime, coordArray, velocityArray);
+		bool sgp4Result = sgp4(GRAV_CONST_TYPE, (*itForTLEData).SGP4_06Info, secFromSatEpochToPredictionStartTime, coordArray, velocityArray);
 		if (sgp4Result == true)
 		{
 			rg_Point3D coord(coordArray[0], coordArray[1], coordArray[2]);

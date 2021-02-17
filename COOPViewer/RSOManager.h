@@ -15,8 +15,8 @@ class RSOManager
 private:
 	list<MinimalRSO> m_RSOs;
 	
-	list<elsetrec> m_TLEFileInfos;
-	list<cSatellite> m_satellites;
+	list<TLEFileInfo> m_TLEFileInfos;
+
 	int m_numSegments;
 
 	map<int, MinimalRSO*> m_mapFromIDToRSO;

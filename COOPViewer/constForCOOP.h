@@ -76,6 +76,13 @@ struct PredictionCommand
 // opsmode = 'a' best understanding of how afspc code works, 'i' imporved sgp4 resulting in smoother behavior
 // GRAV_CONST_TYPE = wgs72old / wgs72 / wgs84;
 
+struct TLEFileInfo
+{
+	elsetrec SGP4_06Info;
+	cSatellite SGP4_80Info;
+};
+
+
 const char OPS_MODE = 'i';
 const gravconsttype GRAV_CONST_TYPE = wgs84;
 
