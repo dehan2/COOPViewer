@@ -30,40 +30,88 @@ void RSOManager::read_prediction_command_file(const string& filePath)
 				char* context;
 				string delimiter = " \t";
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 				string token = strtok_s(lineData, delimiter.c_str(), &context);
+#elif __linux__
+				string token = strtok_r(lineData, delimiter.c_str(), &context);
+#endif
 				m_command.directory = token;
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 				token = strtok_s(NULL, delimiter.c_str(), &context);
+#elif __linux__
+				token = strtok_r(NULL, delimiter.c_str(), &context);
+#endif
 				m_command.tleFile = token;
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 				token = strtok_s(NULL, delimiter.c_str(), &context);
+#elif __linux__
+				token = strtok_r(NULL, delimiter.c_str(), &context);
+#endif
 				m_command.numObject = stoi(token);
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 				token = strtok_s(NULL, delimiter.c_str(), &context);
+#elif __linux__
+				token = strtok_r(NULL, delimiter.c_str(), &context);
+#endif
 				m_command.numLineSegments = stoi(token);
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 				token = strtok_s(NULL, delimiter.c_str(), &context);
+#elif __linux__
+				token = strtok_r(NULL, delimiter.c_str(), &context);
+#endif
 				m_command.cutoffValue = stof(token);
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 				token = strtok_s(NULL, delimiter.c_str(), &context);
+#elif __linux__
+				token = strtok_r(NULL, delimiter.c_str(), &context);
+#endif
 				m_command.predictionTimeWindow = stoi(token);
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 				token = strtok_s(NULL, delimiter.c_str(), &context);
+#elif __linux__
+				token = strtok_r(NULL, delimiter.c_str(), &context);
+#endif
 				m_command.year = stoi(token);
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 				token = strtok_s(NULL, delimiter.c_str(), &context);
+#elif __linux__
+				token = strtok_r(NULL, delimiter.c_str(), &context);
+#endif
 				m_command.month = stoi(token);
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 				token = strtok_s(NULL, delimiter.c_str(), &context);
+#elif __linux__
+				token = strtok_r(NULL, delimiter.c_str(), &context);
+#endif
 				m_command.day = stoi(token);
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 				token = strtok_s(NULL, delimiter.c_str(), &context);
+#elif __linux__
+				token = strtok_r(NULL, delimiter.c_str(), &context);
+#endif
 				m_command.hour = stoi(token);
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 				token = strtok_s(NULL, delimiter.c_str(), &context);
+#elif __linux__
+				token = strtok_r(NULL, delimiter.c_str(), &context);
+#endif
 				m_command.min = stoi(token);
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 				token = strtok_s(NULL, delimiter.c_str(), &context);
+#elif __linux__
+				token = strtok_r(NULL, delimiter.c_str(), &context);
+#endif
 				m_command.sec = stoi(token);
 			}
 		}
