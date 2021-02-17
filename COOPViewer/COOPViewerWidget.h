@@ -22,4 +22,6 @@ public:
 
 	virtual void mousePressEvent(QMouseEvent* event);
 	virtual void process_picking(const int& hits, const GLuint* selectBuff);
+
+	void draw_line_among_OOIs();
 };

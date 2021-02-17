@@ -23,12 +23,13 @@ public:
 
     int milisecPerAnimation = 100;
 
-
 public:
     void update_time_info();
     double change_time_to_given_moment(const double& givenMoment);
     double change_time_by_given_increment(const double& givenIncrement);
     double check_validity_of_given_time(const double& givenTime);
+
+    void update_distance_of_OOI_string();
 
 private:
     Ui::COOPViewerClass ui;
@@ -45,4 +46,6 @@ public slots:
 
     inline void go_to_start_moment() { change_time_to_given_moment(0); }
     inline void go_to_end_moment() { change_time_to_given_moment(m_manager.get_prediction_command().predictionTimeWindow); }
+
+    void objectOfInterest_changed();
 };

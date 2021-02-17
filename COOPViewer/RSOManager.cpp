@@ -585,3 +585,44 @@ pair<double, double> RSOManager::find_time_of_closest_approach_for_RSO_pair(int 
 
 	return make_pair(TCA, minDistance);
 }
+
+
+
+list<MinimalRSO*> RSOManager::find_object_of_interests()
+{
+	list<MinimalRSO*> OOIs;
+
+	for (auto& OOIID : m_objectOfInterestIDs)
+	{
+		MinimalRSO* OOI = nullptr;
+		auto itForOOI = m_mapFromIDToRSO.find(OOIID);
+		if (itForOOI != m_mapFromIDToRSO.end())
+			OOI = (*itForOOI).second;
+
+		OOIs.push_back(OOI);
+	}
+
+	return OOIs;
+}
+
+
+
+double RSOManager::calculate_OOI_distance()
+{
+	if (m_objectOfInterestIDs.size() == 2)
+	{
+		list<MinimalRSO*> OOIs = find_object_of_interests();
+
+		MinimalRSO* primary = OOIs.front();
+		MinimalRSO* secondary = OOIs.back();
+
+		double distance = 0;
+
+		if(primary != nullptr && secondary != nullptr)
+			distance = primary->get_coord().distance(secondary->get_coord());
+
+		return distance;
+	}
+	else
+		return 0;
+}

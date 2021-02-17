@@ -72,6 +72,15 @@ double COOPViewer::check_validity_of_given_time(const double& givenTime)
 
 
 
+void COOPViewer::update_distance_of_OOI_string()
+{
+	double distance = m_manager.calculate_OOI_distance();
+	string distanceStr = to_string(distance) + string(" km");
+	ui.label_distanceOfOOI->setText(QString::fromStdString(distanceStr));
+}
+
+
+
 //////////////////////////////////////////////////////////////////////////
 // QT SLOTS
 //////////////////////////////////////////////////////////////////////////
@@ -136,4 +145,21 @@ void COOPViewer::increase_time_by_step()
 void COOPViewer::decrease_time_by_step()
 {
 	change_time_by_given_increment(-m_stepSize);
+}
+
+
+
+void COOPViewer::objectOfInterest_changed()
+{
+	list<int>* OOIIDs = m_manager.get_objectOfInterestIDs();
+	OOIIDs->clear();
+
+	int primaryID = ui.lineEdit_primaryID->text().toInt();	
+	int secondaryID = ui.lineEdit_secondaryID->text().toInt();
+	OOIIDs->push_back(primaryID);
+	OOIIDs->push_back(secondaryID);
+
+	update_distance_of_OOI_string();
+
+	update();
 }
