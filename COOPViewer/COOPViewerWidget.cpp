@@ -1,7 +1,7 @@
 #include "COOPViewerWidget.h"
 #include "rg_Point3D.h"
 #include "RSOManager.h"
-#include "ResidentSpaceObject.h"
+#include "MinimalRSO.h"
 
 COOPViewerWidget::COOPViewerWidget(QWidget* parent)
 	: VDRCOpenGLWidget(parent)
@@ -41,9 +41,4 @@ void COOPViewerWidget::mousePressEvent(QMouseEvent* event)
 void COOPViewerWidget::process_picking(const int& hits, const GLuint* selectBuff)
 {
 
-}
-
-void COOPViewerWidget::update()
-{
-	draw();
 }

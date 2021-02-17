@@ -442,8 +442,17 @@ tm convert_seconds_to_tmStruct(const cJulian& epoch, const double& targetTime)
 #else
 	gmtime_r(&timet, &gmt);
 #endif
+	gmt.tm_year += 1900;
+
 	return gmt;
 }
+
+
+tm RSOManager::convert_given_moment_to_tm(const double& givenMoment)
+{
+	return convert_seconds_to_tmStruct(m_startMomentOfPredictionTimeWindow, givenMoment);
+}
+
 
 
 string make_time_string(tm moment)

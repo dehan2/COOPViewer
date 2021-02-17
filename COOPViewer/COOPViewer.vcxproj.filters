@@ -41,9 +41,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ResidentSpaceObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="RSOManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -55,9 +52,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ResidentSpaceObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="RSOManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>

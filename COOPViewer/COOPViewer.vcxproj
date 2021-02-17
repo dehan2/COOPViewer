@@ -101,7 +101,6 @@
   <ItemGroup>
     <ClCompile Include="COOPViewerWidget.cpp" />
     <ClCompile Include="MinimalRSO.cpp" />
-    <ClCompile Include="ResidentSpaceObject.cpp" />
     <ClCompile Include="RSOManager.cpp" />
     <QtRcc Include="COOPViewer.qrc" />
     <QtUic Include="COOPViewer.ui" />
@@ -113,7 +112,6 @@
     <QtMoc Include="COOPViewerWidget.h" />
     <ClInclude Include="constForCOOP.h" />
     <ClInclude Include="MinimalRSO.h" />
-    <ClInclude Include="ResidentSpaceObject.h" />
     <ClInclude Include="RSOManager.h" />
   </ItemGroup>
   <ItemGroup>

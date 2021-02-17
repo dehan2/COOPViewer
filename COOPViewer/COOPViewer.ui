@@ -122,7 +122,26 @@
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_4">
              <item>
+              <widget class="QPushButton" name="pushButton_go_to_start">
+               <property name="maximumSize">
+                <size>
+                 <width>40</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>|◀</string>
+               </property>
+              </widget>
+             </item>
+             <item>
               <widget class="QPushButton" name="pushButton_rewind">
+               <property name="maximumSize">
+                <size>
+                 <width>40</width>
+                 <height>16777215</height>
+                </size>
+               </property>
                <property name="text">
                 <string>◀◀</string>
                </property>
@@ -130,6 +149,12 @@
              </item>
              <item>
               <widget class="QPushButton" name="pushButton_play">
+               <property name="maximumSize">
+                <size>
+                 <width>50</width>
+                 <height>16777215</height>
+                </size>
+               </property>
                <property name="text">
                 <string>▶/||</string>
                </property>
@@ -137,8 +162,27 @@
              </item>
              <item>
               <widget class="QPushButton" name="pushButton_forward">
+               <property name="maximumSize">
+                <size>
+                 <width>40</width>
+                 <height>16777215</height>
+                </size>
+               </property>
                <property name="text">
                 <string>▶▶</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButton_go_to_end">
+               <property name="maximumSize">
+                <size>
+                 <width>40</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>▶|</string>
                </property>
               </widget>
              </item>
@@ -149,30 +193,67 @@
              <item>
               <widget class="QLabel" name="label_2">
                <property name="text">
-                <string>Step Size</string>
+                <string>Time step</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="spinBox_stepSize_hour">
+               <property name="maximumSize">
+                <size>
+                 <width>50</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+               <property name="suffix">
+                <string> h</string>
+               </property>
+               <property name="maximum">
+                <number>24</number>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QSpinBox" name="spinBox_stepSize_min">
+               <property name="maximumSize">
+                <size>
+                 <width>50</width>
+                 <height>16777215</height>
+                </size>
+               </property>
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
                </property>
                <property name="suffix">
-                <string> min</string>
+                <string> m</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="spinBox_stepSize_sec">
+              <widget class="QDoubleSpinBox" name="doubleSpinBox_stepSize_sec">
+               <property name="maximumSize">
+                <size>
+                 <width>50</width>
+                 <height>16777215</height>
+                </size>
+               </property>
                <property name="suffix">
-                <string> sec</string>
+                <string> s</string>
+               </property>
+               <property name="decimals">
+                <number>1</number>
                </property>
                <property name="minimum">
-                <number>0</number>
+                <double>0.100000000000000</double>
+               </property>
+               <property name="value">
+                <double>1.000000000000000</double>
                </property>
               </widget>
              </item>
@@ -269,9 +350,126 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>spinBox_stepSize_hour</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>COOPViewerClass</receiver>
+   <slot>time_step_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>943</x>
+     <y>233</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1104</x>
+     <y>234</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinBox_stepSize_min</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>COOPViewerClass</receiver>
+   <slot>time_step_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1004</x>
+     <y>223</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1106</x>
+     <y>261</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>doubleSpinBox_stepSize_sec</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>COOPViewerClass</receiver>
+   <slot>time_step_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1050</x>
+     <y>227</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1103</x>
+     <y>294</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_forward</sender>
+   <signal>clicked()</signal>
+   <receiver>COOPViewerClass</receiver>
+   <slot>increase_time_by_step()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1017</x>
+     <y>194</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1101</x>
+     <y>167</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_rewind</sender>
+   <signal>clicked()</signal>
+   <receiver>COOPViewerClass</receiver>
+   <slot>decrease_time_by_step()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>909</x>
+     <y>203</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1104</x>
+     <y>320</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_go_to_start</sender>
+   <signal>clicked()</signal>
+   <receiver>COOPViewerClass</receiver>
+   <slot>go_to_start_moment()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>849</x>
+     <y>198</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1101</x>
+     <y>136</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_go_to_end</sender>
+   <signal>clicked()</signal>
+   <receiver>COOPViewerClass</receiver>
+   <slot>go_to_end_moment()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1045</x>
+     <y>199</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1099</x>
+     <y>225</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>load_prediction_command()</slot>
   <slot>play_simulation()</slot>
+  <slot>time_step_changed()</slot>
+  <slot>increase_time_by_step()</slot>
+  <slot>decrease_time_by_step()</slot>
+  <slot>go_to_start_moment()</slot>
+  <slot>go_to_end_moment()</slot>
  </slots>
 </ui>

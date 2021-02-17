@@ -38,6 +38,8 @@ public:
 
 	list<MinimalRSO>& get_RSOs() { return m_RSOs; }
 	inline const cJulian& get_epoch() { return m_startMomentOfPredictionTimeWindow; }
+	const PredictionCommand& get_prediction_command() { return m_command; }
+
 
 	void read_prediction_command_file(const string& filePath);
 	void initialize_RSO_manager(const PredictionCommand& command);
@@ -54,6 +56,8 @@ public:
 	void update_RSO_statuses_to_given_moment(const double& givenMoment);
 
 	void save_RSO_infos(const string& filePath);
+
+	tm convert_given_moment_to_tm(const double& givenMoment);
 
 	void generate_maneuver_plan(const int& targetCatalogID, const double& rotationAngle, const double& startTime, const double& endTime, const int& numSegments);
 	void save_maneuver_plan(const string& filePath, const int& targetCatalogID, const double& rotationAngle, const double& startTime, const double& endTime, const int& numSegments);

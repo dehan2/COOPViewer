@@ -15,6 +15,68 @@ COOPViewer::COOPViewer(QWidget* parent)
 
 
 
+void COOPViewer::update_time_info()
+{
+	tm timeInTM = m_manager.convert_given_moment_to_tm(m_currentTime);
+
+	QDate date;
+	date.setDate(timeInTM.tm_year, timeInTM.tm_mon, timeInTM.tm_mday);
+
+	QTime time;
+	time.setHMS(timeInTM.tm_hour, timeInTM.tm_min, timeInTM.tm_sec);
+
+	ui.dateTimeEdit_currTime->setDate(date);
+	ui.dateTimeEdit_currTime->setTime(time);
+	update();
+}
+
+
+
+double COOPViewer::change_time_to_given_moment(const double& givenMoment)
+{
+	m_currentTime = check_validity_of_given_time(givenMoment);
+
+	update_time_info();
+
+	m_manager.update_RSO_statuses_to_given_moment(m_currentTime);
+	ui.openglWidget->update();
+
+	return m_currentTime;
+}
+
+
+
+double COOPViewer::change_time_by_given_increment(const double& givenIncrement)
+{
+	m_currentTime = check_validity_of_given_time(m_currentTime+givenIncrement);
+
+	update_time_info();
+
+	m_manager.update_RSO_statuses_to_given_moment(m_currentTime);
+	ui.openglWidget->update();
+
+	return m_currentTime;
+}
+
+
+
+double COOPViewer::check_validity_of_given_time(const double& givenTime)
+{
+	double correctedTime = givenTime;
+	if (correctedTime < 0)
+		correctedTime = 0;
+	if (correctedTime > m_manager.get_prediction_command().predictionTimeWindow)
+		correctedTime = m_manager.get_prediction_command().predictionTimeWindow;
+	return correctedTime;
+}
+
+
+
+//////////////////////////////////////////////////////////////////////////
+// QT SLOTS
+//////////////////////////////////////////////////////////////////////////
+
+
 void COOPViewer::load_prediction_command()
 {
 	QString QfilePath = QFileDialog::getOpenFileName(this, tr("Open Prediction Command File"), NULL, tr("Prediction Command file (*.txt)"));
@@ -22,8 +84,10 @@ void COOPViewer::load_prediction_command()
 
 	m_manager.read_prediction_command_file(filePath);
 	ui.openglWidget->set_manager(&m_manager);
-	update();
 	ui.openglWidget->update();
+	
+	update_time_info();
+	update();
 }
 
 
@@ -44,15 +108,32 @@ void COOPViewer::play_simulation()
 
 void COOPViewer::increase_simulation_time()
 {
-	m_currentTime += m_simulationSpeed;
-	//update Time
+	change_time_by_given_increment(m_stepSize / 10);
+	update();
 }
 
-void COOPViewer::update_time_info()
-{
-	cJulian julianTime = m_manager.get_epoch();
-	julianTime.AddSec(m_currentTime);
 
-	//QDate date;
-	//date.setDate(julianTime);
+
+
+void COOPViewer::time_step_changed()
+{
+	double sec = ui.doubleSpinBox_stepSize_sec->value();
+	int min = ui.spinBox_stepSize_min->value();
+	int hour = ui.spinBox_stepSize_hour->value();
+
+	m_stepSize = sec + min * 60 + hour * 3600;
+}
+
+
+
+void COOPViewer::increase_time_by_step()
+{
+	change_time_by_given_increment(m_stepSize);
+}
+
+
+
+void COOPViewer::decrease_time_by_step()
+{
+	change_time_by_given_increment(-m_stepSize);
 }

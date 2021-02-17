@@ -3,6 +3,7 @@
 #include <ctime>
 #include <cwchar>
 #include <list>
+#include <string>
 #include "coreLib.h"
 #include "orbitLib.h"
 #include "sgp4ext.h"
