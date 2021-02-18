@@ -59,7 +59,7 @@
       <AdditionalIncludeDirectories>..\..\COOPLib\orbitTools\orbit;..\..\COOPLib\orbitTools\core;..\..\COOPLib\SGP4_06;$(VDIR)\src\V\VUFS\include;..\..\VDRCQtLib2\VDRCQtLib;$(Qt_INCLUDEPATH_);.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;glut32.lib$(Qt_LIBS_);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;$(Qt_LIBS_);%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">

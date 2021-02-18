@@ -33,7 +33,7 @@ void COOPViewer::update_time_info()
 	tm timeInTM = m_manager.convert_given_moment_to_tm(m_currentTime);
 
 	QDate date;
-	date.setDate(timeInTM.tm_year, timeInTM.tm_mon + 1, timeInTM.tm_mday);
+	date.setDate(timeInTM.tm_year, timeInTM.tm_mon, timeInTM.tm_mday);
 
 	QTime time;
 	time.setHMS(timeInTM.tm_hour, timeInTM.tm_min, timeInTM.tm_sec);

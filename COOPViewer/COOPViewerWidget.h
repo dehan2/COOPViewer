@@ -12,6 +12,7 @@ class COOPViewerWidget : public VDRCOpenGLWidget
 
 private:
 	RSOManager* pManager = nullptr;
+	
 	OrbitShortestLink* pShortestLink = nullptr;
 	double m_currentTime = 0.;
 

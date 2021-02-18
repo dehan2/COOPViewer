@@ -55,20 +55,20 @@
           <item>
            <widget class="QGroupBox" name="groupBox">
             <property name="title">
-             <string>Load Files</string>
+             <string>Load PPDB Files</string>
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_2">
              <item>
               <widget class="QPushButton" name="pushButton_load_prediction_command">
                <property name="text">
-                <string>Load Prediction Command</string>
+                <string>1. Load Prediction Command</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QPushButton" name="pushButton_load_PPDB">
                <property name="text">
-                <string>Load PPDB</string>
+                <string>2. Load PPDB</string>
                </property>
               </widget>
              </item>
