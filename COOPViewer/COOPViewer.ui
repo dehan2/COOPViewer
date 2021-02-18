@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1025</width>
-    <height>668</height>
+    <width>1115</width>
+    <height>797</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,63 +16,6 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout_4">
     <item>
-<<<<<<< HEAD
-     <widget class="COOPViewerWidget" name="openglWidget"/>
-    </item>
-    <item>
-     <widget class="QTabWidget" name="tabWidget">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>300</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="currentIndex">
-       <number>1</number>
-      </property>
-      <widget class="QWidget" name="tab">
-       <attribute name="title">
-        <string>Tab 1</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <item>
-         <widget class="QGroupBox" name="groupBox">
-          <property name="title">
-           <string>Load Files</string>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_2">
-           <item>
-            <widget class="QPushButton" name="pushButton_load_prediction_command">
-             <property name="text">
-              <string>Load Prediction Command</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButton_load_PPDB">
-             <property name="text">
-              <string>Load PPDB</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="groupBox_2">
-          <property name="title">
-           <string>Control</string>
-          </property>
-          <layout class="QVBoxLayout" name="verticalLayout_2">
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_3">
-=======
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="COOPViewerWidget" name="openglWidget">
@@ -98,9 +41,15 @@
           <height>0</height>
          </size>
         </property>
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <property name="tabBarAutoHide">
+         <bool>false</bool>
+        </property>
         <widget class="QWidget" name="tab">
          <attribute name="title">
-          <string>Tab 1</string>
+          <string>Viewer Controller</string>
          </attribute>
          <layout class="QVBoxLayout" name="verticalLayout">
           <item>
@@ -109,7 +58,6 @@
              <string>Load Files</string>
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_2">
->>>>>>> 93c981962ed8f4b646aaf8b22d4191050a2357a3
              <item>
               <widget class="QPushButton" name="pushButton_load_prediction_command">
                <property name="text">
@@ -121,6 +69,29 @@
               <widget class="QPushButton" name="pushButton_load_PPDB">
                <property name="text">
                 <string>Load PPDB</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="groupBox_4">
+            <property name="title">
+             <string>Load Shortest Path Files</string>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_9">
+             <item>
+              <widget class="QPushButton" name="pushButton">
+               <property name="text">
+                <string>1. Load STARLINK TLE</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButton_2">
+               <property name="text">
+                <string>2. Load Shoretst Path</string>
                </property>
               </widget>
              </item>
@@ -450,10 +421,11 @@
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="tab_2">
+        <widget class="QWidget" name="tab2">
          <attribute name="title">
           <string>Tab 2</string>
          </attribute>
+         <layout class="QVBoxLayout" name="verticalLayout_6"/>
         </widget>
        </widget>
       </item>
@@ -478,6 +450,9 @@
         <width>16777215</width>
         <height>200</height>
        </size>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_3">
        <attribute name="title">
@@ -575,38 +550,6 @@
        <attribute name="title">
         <string>Tab 2</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
-        <item>
-         <widget class="QGroupBox" name="groupBox_3">
-          <property name="title">
-           <string>Load File</string>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout_6">
-           <item>
-            <widget class="QPushButton" name="pushButton_2">
-             <property name="text">
-              <string>Load STARLINK</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButton">
-             <property name="text">
-              <string>Load Shortest Link</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QGroupBox" name="groupBox_4">
-          <property name="title">
-           <string>GroupBox</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
       </widget>
      </widget>
     </item>
@@ -617,7 +560,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1025</width>
+     <width>1115</width>
      <height>21</height>
     </rect>
    </property>
@@ -651,16 +594,11 @@
    <slot>load_prediction_command()</slot>
    <hints>
     <hint type="sourcelabel">
-<<<<<<< HEAD
-     <x>863</x>
-     <y>111</y>
-=======
      <x>895</x>
      <y>117</y>
->>>>>>> 93c981962ed8f4b646aaf8b22d4191050a2357a3
     </hint>
     <hint type="destinationlabel">
-     <x>992</x>
+     <x>1097</x>
      <y>72</y>
     </hint>
    </hints>
@@ -672,16 +610,11 @@
    <slot>play_simulation()</slot>
    <hints>
     <hint type="sourcelabel">
-<<<<<<< HEAD
-     <x>856</x>
-     <y>197</y>
-=======
      <x>921</x>
-     <y>210</y>
->>>>>>> 93c981962ed8f4b646aaf8b22d4191050a2357a3
+     <y>271</y>
     </hint>
     <hint type="destinationlabel">
-     <x>992</x>
+     <x>1102</x>
      <y>199</y>
     </hint>
    </hints>
@@ -693,11 +626,11 @@
    <slot>time_step_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>847</x>
-     <y>233</y>
+     <x>943</x>
+     <y>294</y>
     </hint>
     <hint type="destinationlabel">
-     <x>992</x>
+     <x>1104</x>
      <y>234</y>
     </hint>
    </hints>
@@ -709,11 +642,11 @@
    <slot>time_step_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>903</x>
-     <y>223</y>
+     <x>1004</x>
+     <y>284</y>
     </hint>
     <hint type="destinationlabel">
-     <x>992</x>
+     <x>1106</x>
      <y>261</y>
     </hint>
    </hints>
@@ -725,11 +658,11 @@
    <slot>time_step_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>959</x>
-     <y>227</y>
+     <x>1050</x>
+     <y>288</y>
     </hint>
     <hint type="destinationlabel">
-     <x>992</x>
+     <x>1103</x>
      <y>294</y>
     </hint>
    </hints>
@@ -741,16 +674,11 @@
    <slot>increase_time_by_step()</slot>
    <hints>
     <hint type="sourcelabel">
-<<<<<<< HEAD
-     <x>905</x>
-     <y>194</y>
-=======
      <x>985</x>
-     <y>210</y>
->>>>>>> 93c981962ed8f4b646aaf8b22d4191050a2357a3
+     <y>271</y>
     </hint>
     <hint type="destinationlabel">
-     <x>992</x>
+     <x>1101</x>
      <y>167</y>
     </hint>
    </hints>
@@ -762,16 +690,11 @@
    <slot>decrease_time_by_step()</slot>
    <hints>
     <hint type="sourcelabel">
-<<<<<<< HEAD
-     <x>797</x>
-     <y>203</y>
-=======
      <x>847</x>
-     <y>210</y>
->>>>>>> 93c981962ed8f4b646aaf8b22d4191050a2357a3
+     <y>271</y>
     </hint>
     <hint type="destinationlabel">
-     <x>992</x>
+     <x>1104</x>
      <y>320</y>
     </hint>
    </hints>
@@ -783,16 +706,11 @@
    <slot>go_to_start_moment()</slot>
    <hints>
     <hint type="sourcelabel">
-<<<<<<< HEAD
-     <x>748</x>
-     <y>198</y>
-=======
      <x>783</x>
-     <y>210</y>
->>>>>>> 93c981962ed8f4b646aaf8b22d4191050a2357a3
+     <y>271</y>
     </hint>
     <hint type="destinationlabel">
-     <x>992</x>
+     <x>1101</x>
      <y>136</y>
     </hint>
    </hints>
@@ -804,30 +722,16 @@
    <slot>go_to_end_moment()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>954</x>
-     <y>199</y>
+     <x>1045</x>
+     <y>260</y>
     </hint>
     <hint type="destinationlabel">
-     <x>992</x>
+     <x>1099</x>
      <y>225</y>
     </hint>
    </hints>
   </connection>
   <connection>
-<<<<<<< HEAD
-   <sender>pushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>COOPViewerClass</receiver>
-   <slot>load_shortest_link()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>890</x>
-     <y>209</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1027</x>
-     <y>641</y>
-=======
    <sender>pushButton_updateOOI</sender>
    <signal>clicked()</signal>
    <receiver>COOPViewerClass</receiver>
@@ -835,30 +739,15 @@
    <hints>
     <hint type="sourcelabel">
      <x>1024</x>
-     <y>301</y>
+     <y>362</y>
     </hint>
     <hint type="destinationlabel">
      <x>1102</x>
      <y>375</y>
->>>>>>> 93c981962ed8f4b646aaf8b22d4191050a2357a3
     </hint>
    </hints>
   </connection>
   <connection>
-<<<<<<< HEAD
-   <sender>pushButton_2</sender>
-   <signal>clicked()</signal>
-   <receiver>COOPViewerClass</receiver>
-   <slot>load_starlink()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>829</x>
-     <y>217</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>709</x>
-     <y>645</y>
-=======
    <sender>pushButton_load_PPDB</sender>
    <signal>clicked()</signal>
    <receiver>COOPViewerClass</receiver>
@@ -881,13 +770,44 @@
    <slot>PPDB_row_selected(QModelIndex)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>933</x>
-     <y>583</y>
+     <x>944</x>
+     <y>754</y>
     </hint>
     <hint type="destinationlabel">
      <x>1102</x>
      <y>537</y>
->>>>>>> 93c981962ed8f4b646aaf8b22d4191050a2357a3
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>COOPViewerClass</receiver>
+   <slot>load_starlink()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>866</x>
+     <y>162</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1110</x>
+     <y>758</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>COOPViewerClass</receiver>
+   <slot>load_shortest_link()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>978</x>
+     <y>162</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1112</x>
+     <y>425</y>
     </hint>
    </hints>
   </connection>
@@ -900,13 +820,10 @@
   <slot>decrease_time_by_step()</slot>
   <slot>go_to_start_moment()</slot>
   <slot>go_to_end_moment()</slot>
-<<<<<<< HEAD
-  <slot>load_shortest_link()</slot>
-  <slot>load_starlink()</slot>
-=======
   <slot>objectOfInterest_changed()</slot>
   <slot>load_PPDB_file()</slot>
   <slot>PPDB_row_selected(QModelIndex)</slot>
->>>>>>> 93c981962ed8f4b646aaf8b22d4191050a2357a3
+  <slot>load_starlink()</slot>
+  <slot>load_shortest_link()</slot>
  </slots>
 </ui>

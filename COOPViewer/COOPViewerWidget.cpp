@@ -20,7 +20,6 @@ void COOPViewerWidget::draw()
 	//Drawing scale: 1/100
 
 	draw_sphere(rg_Point3D(0, 0, 0), 64, BLUE);
-	
 
 	if (pManager != nullptr && pManager->get_RSOs().empty() == false)
 	{
@@ -28,13 +27,14 @@ void COOPViewerWidget::draw()
 		{
 			rg_Point3D& coord = rso.get_coord();
 			draw_point(coord / 100, 5, GREEN);
-<<<<<<< HEAD
 		}
+		if (pManager->get_objectOfInterestIDs()->empty() == false)
+			draw_line_among_OOIs();
 	}
 
 
-	
-	if(pShortestLink != nullptr)
+
+	if (pShortestLink != nullptr)
 	{
 		const std::list<int> momentNShortestLinkRSOsID = pShortestLink->find_shortest_link_RSOs_ID_in_closest_moment(m_currentTime);
 		std::list<rg_Point3D> shortestLinkCoord;
@@ -59,12 +59,7 @@ void COOPViewerWidget::draw()
 		}
 		draw_line(lastCoord / 100, destCoord / 100, 5, RED);
 		draw_sphere(destCoord / 100, 1, PINK);
-=======
-		}
 
-		if (pManager->get_objectOfInterestIDs()->empty() == false)
-			draw_line_among_OOIs();
->>>>>>> 93c981962ed8f4b646aaf8b22d4191050a2357a3
 	}
 }
 
@@ -74,10 +69,6 @@ void COOPViewerWidget::mousePressEvent(QMouseEvent* event)
 {
 	lastPos.setX(event->x());
 	lastPos.setY(event->y());
-<<<<<<< HEAD
-
-=======
->>>>>>> 93c981962ed8f4b646aaf8b22d4191050a2357a3
 }
 
 void COOPViewerWidget::process_picking(const int& hits, const GLuint* selectBuff)

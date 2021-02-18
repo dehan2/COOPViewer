@@ -32,14 +32,14 @@ public:
 
     int milisecPerAnimation = 100;
 
-<<<<<<< HEAD
+
     vector<int> m_shortest_links;
-=======
+
     QStandardItemModel m_PPDBModel;
     int targetRSOID = -1;
 
     map<int, const TCAReport*> m_mapFromPPDBRowToTCAReport;
->>>>>>> 93c981962ed8f4b646aaf8b22d4191050a2357a3
+
 
 public:
     void update_time_info();
@@ -61,10 +61,10 @@ public slots:
     void load_PPDB_file();
     void play_simulation();
 
-    //SH
+    
     void load_starlink();
     void load_shortest_link();
-    //SH
+    
 
 	void increase_simulation_time();
     void time_step_changed();
