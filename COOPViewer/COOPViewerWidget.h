@@ -24,4 +24,5 @@ public:
 	virtual void process_picking(const int& hits, const GLuint* selectBuff);
 
 	void draw_line_among_OOIs();
+	void change_view_to_OOI_direction();
 };

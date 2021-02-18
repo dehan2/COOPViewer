@@ -4,11 +4,24 @@
 #include "cJulian.h"
 #include <QDate>
 #include <QTime>
+#include <QTableView>
 
 COOPViewer::COOPViewer(QWidget* parent)
 	: QMainWindow(parent), m_simulationTimer(this)
 {
     ui.setupUi(this);
+
+	add_PPDB_table_header();
+	ui.tableView_PPDBData->setModel(&m_PPDBModel);
+	ui.tableView_PPDBData->setEditTriggers(QAbstractItemView::NoEditTriggers);
+	adjust_PPDB_column_width();
+
+	//ui.tableView_PPDBData->resizeColumnsToContents();
+	ui.tableView_PPDBData->resizeRowsToContents();
+	ui.tableView_PPDBData->setSelectionBehavior(QAbstractItemView::SelectRows);
+	ui.tableView_PPDBData->setSelectionMode(QAbstractItemView::SingleSelection);
+
+	time_step_changed();
 
 	connect(&m_simulationTimer, SIGNAL(timeout()), this, SLOT(increase_simulation_time()));
 }
@@ -27,6 +40,9 @@ void COOPViewer::update_time_info()
 
 	ui.dateTimeEdit_currTime->setDate(date);
 	ui.dateTimeEdit_currTime->setTime(time);
+
+	update_distance_of_OOI_string();
+
 	update();
 }
 
@@ -81,6 +97,70 @@ void COOPViewer::update_distance_of_OOI_string()
 
 
 
+void COOPViewer::add_PPDB_table_header()
+{
+	m_PPDBModel.setColumnCount(NUM_COL_PPDB);
+	m_PPDBModel.setHeaderData(COL_PPDB_PRIMARY, Qt::Horizontal, QObject::tr("Primary"));
+	m_PPDBModel.setHeaderData(COL_PPDB_SECONDARY, Qt::Horizontal, QObject::tr("Secondary"));
+	m_PPDBModel.setHeaderData(COL_PPDB_DCA, Qt::Horizontal, QObject::tr("DCA(km)"));
+	m_PPDBModel.setHeaderData(COL_PPDB_TCA, Qt::Horizontal, QObject::tr("TCA"));
+	m_PPDBModel.setHeaderData(COL_PPDB_CASTART, Qt::Horizontal, QObject::tr("CA Start"));
+	m_PPDBModel.setHeaderData(COL_PPDB_CAEND, Qt::Horizontal, QObject::tr("CA End"));
+}
+
+
+
+void COOPViewer::adjust_PPDB_column_width()
+{
+	ui.tableView_PPDBData->setColumnWidth(COL_PPDB_PRIMARY, 100);
+	ui.tableView_PPDBData->setColumnWidth(COL_PPDB_SECONDARY, 100);
+	ui.tableView_PPDBData->setColumnWidth(COL_PPDB_DCA, 100);
+	ui.tableView_PPDBData->setColumnWidth(COL_PPDB_TCA, 120);
+	ui.tableView_PPDBData->setColumnWidth(COL_PPDB_CASTART, 120);
+	ui.tableView_PPDBData->setColumnWidth(COL_PPDB_CAEND, 120);
+}
+
+
+
+void COOPViewer::update_PPDB_table()
+{
+	int currRow = 0;
+	m_mapFromPPDBRowToTCAReport.clear();
+
+	for (auto& entity : m_manager.get_PPDB_infos())
+	{
+		QStandardItem* currItem = new QStandardItem(1, NUM_COL_PPDB);
+		m_PPDBModel.insertRow(currRow, currItem);
+
+		QModelIndex primaryIndex = m_PPDBModel.index(currRow, COL_PPDB_PRIMARY);
+		QModelIndex secondaryIndex = m_PPDBModel.index(currRow, COL_PPDB_SECONDARY);
+		QModelIndex DCAIndex = m_PPDBModel.index(currRow, COL_PPDB_DCA);
+		QModelIndex TCAIndex = m_PPDBModel.index(currRow, COL_PPDB_TCA);
+		QModelIndex CAStartIndex = m_PPDBModel.index(currRow, COL_PPDB_CASTART);
+		QModelIndex CAEndIndex = m_PPDBModel.index(currRow, COL_PPDB_CAEND);
+
+		string TCAStr = m_manager.make_time_string(entity.timeOfClosestApproach);
+		string CAStartStr = m_manager.make_time_string(entity.closeApproachEnteringTime);
+		string CAEndStr = m_manager.make_time_string(entity.closeApproachLeavingTime);
+
+		m_PPDBModel.setData(primaryIndex, QString::number(entity.primaryID));
+		m_PPDBModel.setData(secondaryIndex, QString::number(entity.secondaryID));
+		m_PPDBModel.setData(DCAIndex, QString::number(entity.distanceOfClosestApproach));
+		m_PPDBModel.setData(TCAIndex, QString::fromStdString(TCAStr));
+		m_PPDBModel.setData(CAStartIndex, QString::fromStdString(CAStartStr));
+		m_PPDBModel.setData(CAEndIndex, QString::fromStdString(CAEndStr));
+
+		m_mapFromPPDBRowToTCAReport[currRow] = &entity;
+
+		currRow++;
+	}
+
+	//ui.tableView_PPDBData->resizeColumnsToContents();
+	//ui.tableView_PPDBData->resizeRowsToContents();
+}
+
+
+
 //////////////////////////////////////////////////////////////////////////
 // QT SLOTS
 //////////////////////////////////////////////////////////////////////////
@@ -96,6 +176,19 @@ void COOPViewer::load_prediction_command()
 	ui.openglWidget->update();
 	
 	update_time_info();
+	update();
+}
+
+
+
+void COOPViewer::load_PPDB_file()
+{
+	QString QfilePath = QFileDialog::getOpenFileName(this, tr("Open Prediction Command File"), NULL, tr("Prediction Command file (*.txt)"));
+	string filePath = translate_to_window_path(QfilePath);
+
+	m_manager.load_PPDB(filePath);
+	update_PPDB_table();
+
 	update();
 }
 
@@ -160,6 +253,24 @@ void COOPViewer::objectOfInterest_changed()
 	OOIIDs->push_back(secondaryID);
 
 	update_distance_of_OOI_string();
+	ui.openglWidget->change_view_to_OOI_direction();
+
+	update();
+}
+
+
+
+void COOPViewer::PPDB_row_selected(QModelIndex index)
+{
+	int selectedRow = index.row();
+	const TCAReport* selectedEntity = m_mapFromPPDBRowToTCAReport.at(selectedRow);
+
+	double TCA = selectedEntity->timeOfClosestApproach;
+	change_time_to_given_moment(TCA);
+
+	ui.lineEdit_primaryID->setText(QString::number(selectedEntity->primaryID));
+	ui.lineEdit_secondaryID->setText(QString::number(selectedEntity->secondaryID));
+	objectOfInterest_changed();
 
 	update();
 }

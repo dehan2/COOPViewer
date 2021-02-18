@@ -6,6 +6,8 @@
 #include "constForCOOP.h"
 #include "RSOManager.h"
 #include <QTimer>
+#include <QStandardItemModel>
+#include <map>
 
 class COOPViewer : public QMainWindow
 {
@@ -23,6 +25,11 @@ public:
 
     int milisecPerAnimation = 100;
 
+    QStandardItemModel m_PPDBModel;
+    int targetRSOID = -1;
+
+    map<int, const TCAReport*> m_mapFromPPDBRowToTCAReport;
+
 public:
     void update_time_info();
     double change_time_to_given_moment(const double& givenMoment);
@@ -31,11 +38,16 @@ public:
 
     void update_distance_of_OOI_string();
 
+    void add_PPDB_table_header();
+    void adjust_PPDB_column_width();
+    void update_PPDB_table();
+
 private:
     Ui::COOPViewerClass ui;
 
 public slots:
     void load_prediction_command();
+    void load_PPDB_file();
     void play_simulation();
 
 	void increase_simulation_time();
@@ -48,4 +60,5 @@ public slots:
     inline void go_to_end_moment() { change_time_to_given_moment(m_manager.get_prediction_command().predictionTimeWindow); }
 
     void objectOfInterest_changed();
+    void PPDB_row_selected(QModelIndex index);
 };
