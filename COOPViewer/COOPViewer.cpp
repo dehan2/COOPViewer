@@ -20,13 +20,15 @@ void COOPViewer::update_time_info()
 	tm timeInTM = m_manager.convert_given_moment_to_tm(m_currentTime);
 
 	QDate date;
-	date.setDate(timeInTM.tm_year, timeInTM.tm_mon, timeInTM.tm_mday);
+	date.setDate(timeInTM.tm_year, timeInTM.tm_mon + 1, timeInTM.tm_mday);
 
 	QTime time;
 	time.setHMS(timeInTM.tm_hour, timeInTM.tm_min, timeInTM.tm_sec);
 
 	ui.dateTimeEdit_currTime->setDate(date);
 	ui.dateTimeEdit_currTime->setTime(time);
+
+	ui.openglWidget->set_current_time(m_currentTime);
 	update();
 }
 
@@ -102,6 +104,39 @@ void COOPViewer::play_simulation()
 	{
 		m_simulationTimer.stop();
 	}
+}
+
+void COOPViewer::load_starlink()
+{
+	QString QfilePath = QFileDialog::getOpenFileName(this, tr("Open Prediction Command File"), NULL, tr("Prediction Command file (*.txt)"));
+	string filePath = translate_to_window_path(QfilePath);
+
+	m_manager.read_prediction_command_file_STARLINK(filePath);
+	ui.openglWidget->set_manager(&m_manager);
+	ui.openglWidget->update();
+
+	update_time_info();
+	update();
+}
+
+void COOPViewer::load_shortest_link()
+{
+	
+	QString QfilePath = QFileDialog::getOpenFileName(this, tr("Open Prediction Command File"), NULL, tr("Prediction Command file (*.txt)"));
+	string filePath = translate_to_window_path(QfilePath);
+	m_orbitShorestLink.load_orbit_shortest_link(filePath);
+	
+
+
+	//m_shortest_links = { 44238, 47145, 47164, 47175, 47181, 47144, 47128, 46137, 47147, 44968, 45737, 46774, 44928, 47372, 47381 };
+	/////TODO
+	//ui.openglWidget->set_shortest_links(m_shortest_links); -> 
+	/////TODO
+	ui.openglWidget->set_shortest_links(&m_orbitShorestLink);
+	ui.openglWidget->update();
+
+	update_time_info();
+	update();
 }
 
 

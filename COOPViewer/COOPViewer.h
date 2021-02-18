@@ -5,7 +5,12 @@
 
 #include "constForCOOP.h"
 #include "RSOManager.h"
+#include "OrbitShortestLink.h"
 #include <QTimer>
+
+#include <vector>
+
+using std::vector;
 
 class COOPViewer : public QMainWindow
 {
@@ -14,6 +19,8 @@ class COOPViewer : public QMainWindow
 public:
     COOPViewer(QWidget *parent = Q_NULLPTR);
     RSOManager m_manager;
+    
+    OrbitShortestLink m_orbitShorestLink;
 
     double m_currentTime = 0;
 
@@ -23,6 +30,7 @@ public:
 
     int milisecPerAnimation = 100;
 
+    vector<int> m_shortest_links;
 
 public:
     void update_time_info();
@@ -36,6 +44,11 @@ private:
 public slots:
     void load_prediction_command();
     void play_simulation();
+
+    //SH
+    void load_starlink();
+    void load_shortest_link();
+    //SH
 
 	void increase_simulation_time();
     void time_step_changed();

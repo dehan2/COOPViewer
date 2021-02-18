@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1105</width>
+    <width>1025</width>
     <height>668</height>
    </rect>
   </property>
@@ -31,6 +31,9 @@
         <width>300</width>
         <height>0</height>
        </size>
+      </property>
+      <property name="currentIndex">
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -281,6 +284,38 @@
        <attribute name="title">
         <string>Tab 2</string>
        </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="QGroupBox" name="groupBox_3">
+          <property name="title">
+           <string>Load File</string>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_6">
+           <item>
+            <widget class="QPushButton" name="pushButton_2">
+             <property name="text">
+              <string>Load STARLINK</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton">
+             <property name="text">
+              <string>Load Shortest Link</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox_4">
+          <property name="title">
+           <string>GroupBox</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </widget>
     </item>
@@ -291,7 +326,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1105</width>
+     <width>1025</width>
      <height>21</height>
     </rect>
    </property>
@@ -325,11 +360,11 @@
    <slot>load_prediction_command()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>903</x>
+     <x>863</x>
      <y>111</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1097</x>
+     <x>992</x>
      <y>72</y>
     </hint>
    </hints>
@@ -341,11 +376,11 @@
    <slot>play_simulation()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>940</x>
+     <x>856</x>
      <y>197</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1102</x>
+     <x>992</x>
      <y>199</y>
     </hint>
    </hints>
@@ -357,11 +392,11 @@
    <slot>time_step_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>943</x>
+     <x>847</x>
      <y>233</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1104</x>
+     <x>992</x>
      <y>234</y>
     </hint>
    </hints>
@@ -373,11 +408,11 @@
    <slot>time_step_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1004</x>
+     <x>903</x>
      <y>223</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1106</x>
+     <x>992</x>
      <y>261</y>
     </hint>
    </hints>
@@ -389,11 +424,11 @@
    <slot>time_step_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1050</x>
+     <x>959</x>
      <y>227</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1103</x>
+     <x>992</x>
      <y>294</y>
     </hint>
    </hints>
@@ -405,11 +440,11 @@
    <slot>increase_time_by_step()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1017</x>
+     <x>905</x>
      <y>194</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1101</x>
+     <x>992</x>
      <y>167</y>
     </hint>
    </hints>
@@ -421,11 +456,11 @@
    <slot>decrease_time_by_step()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>909</x>
+     <x>797</x>
      <y>203</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1104</x>
+     <x>992</x>
      <y>320</y>
     </hint>
    </hints>
@@ -437,11 +472,11 @@
    <slot>go_to_start_moment()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>849</x>
+     <x>748</x>
      <y>198</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1101</x>
+     <x>992</x>
      <y>136</y>
     </hint>
    </hints>
@@ -453,12 +488,44 @@
    <slot>go_to_end_moment()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1045</x>
+     <x>954</x>
      <y>199</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1099</x>
+     <x>992</x>
      <y>225</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>COOPViewerClass</receiver>
+   <slot>load_shortest_link()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>890</x>
+     <y>209</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1027</x>
+     <y>641</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>COOPViewerClass</receiver>
+   <slot>load_starlink()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>829</x>
+     <y>217</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>709</x>
+     <y>645</y>
     </hint>
    </hints>
   </connection>
@@ -471,5 +538,7 @@
   <slot>decrease_time_by_step()</slot>
   <slot>go_to_start_moment()</slot>
   <slot>go_to_end_moment()</slot>
+  <slot>load_shortest_link()</slot>
+  <slot>load_starlink()</slot>
  </slots>
 </ui>

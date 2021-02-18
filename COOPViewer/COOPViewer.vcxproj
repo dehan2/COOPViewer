@@ -51,21 +51,24 @@
       <AdditionalIncludeDirectories>..\..\COOPLib\orbitTools\orbit;..\..\COOPLib\orbitTools\core;..\..\COOPLib\SGP4_06;$(VDIR)\src\V\VUFS\include;..\..\VDRCQtLib2\VDRCQtLib;$(Qt_INCLUDEPATH_);.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\COOPLib\orbitTools\orbit;..\..\COOPLib\orbitTools\core;..\..\COOPLib\SGP4_06;$(VDIR)\src\V\VUFS\include;..\..\VDRCQtLib2\VDRCQtLib;$(Qt_INCLUDEPATH_);.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;glut32.lib$(Qt_LIBS_);%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
-    <QtInstall>msvc2019_64</QtInstall>
+    <QtInstall>msvc2017_64</QtInstall>
     <QtModules>core;gui;opengl;widgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
-    <QtInstall>msvc2019_64</QtInstall>
+    <QtInstall>msvc2017_64</QtInstall>
     <QtModules>core;gui;opengl;widgets</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
@@ -101,6 +104,7 @@
   <ItemGroup>
     <ClCompile Include="COOPViewerWidget.cpp" />
     <ClCompile Include="MinimalRSO.cpp" />
+    <ClCompile Include="OrbitShortestLink.cpp" />
     <ClCompile Include="RSOManager.cpp" />
     <QtRcc Include="COOPViewer.qrc" />
     <QtUic Include="COOPViewer.ui" />
@@ -112,6 +116,7 @@
     <QtMoc Include="COOPViewerWidget.h" />
     <ClInclude Include="constForCOOP.h" />
     <ClInclude Include="MinimalRSO.h" />
+    <ClInclude Include="OrbitShortestLink.h" />
     <ClInclude Include="RSOManager.h" />
   </ItemGroup>
   <ItemGroup>

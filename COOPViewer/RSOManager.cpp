@@ -198,6 +198,191 @@ void RSOManager::load_two_line_element_set_file(const string& filePath, const in
 	fin.close();
 }
 
+void RSOManager::read_prediction_command_file_STARLINK(const string& filePath)
+{
+	ifstream fin;
+	fin.open(filePath);
+
+	if (fin.is_open())
+	{
+		while (!fin.eof())
+		{
+			char lineData[256];
+			fin.getline(lineData, 256);
+
+			if (lineData[0] != '#')
+			{
+				char* context;
+				string delimiter = " \t";
+
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+				string token = strtok_s(lineData, delimiter.c_str(), &context);
+#elif __linux__
+				string token = strtok_r(lineData, delimiter.c_str(), &context);
+#endif
+				m_command.directory = token;
+
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+				token = strtok_s(NULL, delimiter.c_str(), &context);
+#elif __linux__
+				token = strtok_r(NULL, delimiter.c_str(), &context);
+#endif
+
+				string tempStr = string("latest.tle");
+				m_command.tleFile = tempStr;
+
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+				token = strtok_s(NULL, delimiter.c_str(), &context);
+#elif __linux__
+				token = strtok_r(NULL, delimiter.c_str(), &context);
+#endif
+				m_command.numObject = stoi(token);
+
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+				token = strtok_s(NULL, delimiter.c_str(), &context);
+#elif __linux__
+				token = strtok_r(NULL, delimiter.c_str(), &context);
+#endif
+				m_command.numLineSegments = stoi(token);
+
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+				token = strtok_s(NULL, delimiter.c_str(), &context);
+#elif __linux__
+				token = strtok_r(NULL, delimiter.c_str(), &context);
+#endif
+				m_command.cutoffValue = stof(token);
+
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+				token = strtok_s(NULL, delimiter.c_str(), &context);
+#elif __linux__
+				token = strtok_r(NULL, delimiter.c_str(), &context);
+#endif
+				m_command.predictionTimeWindow = stoi(token);
+
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+				token = strtok_s(NULL, delimiter.c_str(), &context);
+#elif __linux__
+				token = strtok_r(NULL, delimiter.c_str(), &context);
+#endif
+				m_command.year = stoi(token);
+
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+				token = strtok_s(NULL, delimiter.c_str(), &context);
+#elif __linux__
+				token = strtok_r(NULL, delimiter.c_str(), &context);
+#endif
+				m_command.month = stoi(token);
+
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+				token = strtok_s(NULL, delimiter.c_str(), &context);
+#elif __linux__
+				token = strtok_r(NULL, delimiter.c_str(), &context);
+#endif
+				m_command.day = stoi(token);
+
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+				token = strtok_s(NULL, delimiter.c_str(), &context);
+#elif __linux__
+				token = strtok_r(NULL, delimiter.c_str(), &context);
+#endif
+				m_command.hour = stoi(token);
+
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+				token = strtok_s(NULL, delimiter.c_str(), &context);
+#elif __linux__
+				token = strtok_r(NULL, delimiter.c_str(), &context);
+#endif
+				m_command.min = stoi(token);
+
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+				token = strtok_s(NULL, delimiter.c_str(), &context);
+#elif __linux__
+				token = strtok_r(NULL, delimiter.c_str(), &context);
+#endif
+				m_command.sec = stoi(token);
+			}
+		}
+	}
+
+	fin.close();
+	initialize_RSO_manager_STARLINK(m_command);
+}
+
+void RSOManager::initialize_RSO_manager_STARLINK(const PredictionCommand& command)
+{
+	string filePath = command.directory + command.tleFile;
+	load_two_line_element_set_file_STARLINK(filePath, command.numObject);
+
+	m_numSegments = command.numLineSegments;
+	m_startMomentOfPredictionTimeWindow = cJulian(command.year, command.month, command.day, command.hour, command.min, command.sec);
+
+	int numFilteredTLE = filter_invalid_TLEs();
+
+	for (auto& TLEInfo : m_TLEFileInfos)
+	{
+		int catalogID = stoi(TLEInfo.SGP4_80Info.Orbit().SatId());
+		m_RSOs.push_back(MinimalRSO(catalogID, m_numSegments, &TLEInfo.SGP4_80Info, &m_startMomentOfPredictionTimeWindow, &TLEInfo.SGP4_06Info));
+		m_mapFromIDToRSO[catalogID] = &m_RSOs.back();
+	}
+
+#ifdef CHECK_TLE
+	cout << "Data check..." << endl;
+	auto dangerClosePairs = find_danger_close_pairs(1.0);
+	for (auto& dangerClosePair : dangerClosePairs)
+	{
+		auto primary = dangerClosePair.at(0);
+		auto secondary = dangerClosePair.at(1);
+		double interRSODistance = primary->get_coord().distance(secondary->get_coord());
+		cout << "Short distance pair [" << primary->get_satellite()->Orbit().SatId() << ", " << secondary->get_satellite()->Orbit().SatId() << "] with d: " << interRSODistance << "km" << endl;
+	}
+#endif
+}
+
+void RSOManager::load_two_line_element_set_file_STARLINK(const string& filePath, const int& numObjects)
+{
+	ifstream fin;
+	fin.open(filePath.c_str());
+	string delimiter = " ";
+
+	int targetNumRSOs = numObjects;
+	if (numObjects == 0)
+		targetNumRSOs = INT_MAX;
+
+	for (int i = 0; i < targetNumRSOs; i++)
+	{
+		string firstLine, secondLine, thirdLine;
+		getline(fin, firstLine);
+		if (firstLine.length() > 0)
+		{
+			getline(fin, secondLine);
+			getline(fin, thirdLine);
+			if (firstLine.find("STARLINK") != string::npos)
+			{
+				size_t pos = 0;
+				pos = firstLine.find(delimiter);
+				firstLine = firstLine.substr(pos + delimiter.length());
+				cTle tleSGP4(firstLine, secondLine, thirdLine);
+				cSatellite satSGP4(tleSGP4);
+
+				char c_secondLine[130];
+				char c_thirdLine[130];
+
+				strcpy(c_secondLine, secondLine.c_str());
+				strcpy(c_thirdLine, thirdLine.c_str());
+				elsetrec currData = convert_TLE_to_elsetrec(c_secondLine, c_thirdLine);
+				m_TLEFileInfos.push_back({ currData, satSGP4 });
+			}
+		}
+		else
+		{
+			break;
+		}
+
+	}
+
+	fin.close();
+}
+
 
 
 elsetrec RSOManager::convert_TLE_to_elsetrec(char* longstr1, char* longstr2)
