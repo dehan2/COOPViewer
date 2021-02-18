@@ -6,6 +6,7 @@
 #include "constForCOOP.h"
 #include "RSOManager.h"
 #include "OrbitShortestLink.h"
+#include "OrbitTunnel.h"
 #include <QTimer>
 #include <QStandardItemModel>
 #include <map>
@@ -23,6 +24,7 @@ public:
     RSOManager m_manager;
     
     OrbitShortestLink m_orbitShorestLink;
+    OrbitTunnel m_orbitTunnel;
 
     double m_currentTime = 0;
 
@@ -65,6 +67,7 @@ public slots:
     void load_starlink();
     void load_shortest_link();
     
+    void load_orbit_tunnel();
 
 	void increase_simulation_time();
     void time_step_changed();

@@ -5,7 +5,7 @@
 
 class RSOManager;
 class OrbitShortestLink;
-
+class OrbitTunnel;
 class COOPViewerWidget : public VDRCOpenGLWidget
 {
 	Q_OBJECT
@@ -16,12 +16,15 @@ private:
 	OrbitShortestLink* pShortestLink = nullptr;
 	double m_currentTime = 0.;
 
+	OrbitTunnel* pOrbitTunnel = nullptr;
+
 public:
 	explicit COOPViewerWidget(QWidget* parent = 0);
 	virtual ~COOPViewerWidget();
 
 	void set_manager(RSOManager* manager) { pManager = manager; }
 	void set_shortest_links(OrbitShortestLink* shortestLink) { pShortestLink = shortestLink; }
+	void set_orbit_tunnel(OrbitTunnel* orbitTunnel) {	pOrbitTunnel = orbitTunnel;	}
 
 	virtual void draw();
 

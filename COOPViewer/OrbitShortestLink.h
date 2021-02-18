@@ -22,7 +22,7 @@ public:
 
     
 
-    void load_orbit_shortest_link(const string& filePath);
+    void load_orbit_shortest_link(const std::string& filePath);
 
 
     inline const Sphere& get_src_ground_coordinate() { return m_srcGroundCoordinate; }

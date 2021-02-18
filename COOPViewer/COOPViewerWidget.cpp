@@ -3,6 +3,7 @@
 #include "RSOManager.h"
 #include "MinimalRSO.h"
 #include "OrbitShortestLink.h"
+#include "OrbitTunnel.h"
 
 COOPViewerWidget::COOPViewerWidget(QWidget* parent)
 	: VDRCOpenGLWidget(parent)
@@ -19,7 +20,7 @@ void COOPViewerWidget::draw()
 {
 	//Drawing scale: 1/100
 
-	draw_sphere(rg_Point3D(0, 0, 0), 64, BLUE);
+	//draw_sphere(rg_Point3D(0, 0, 0), 64, BLUE);
 
 	if (pManager != nullptr && pManager->get_RSOs().empty() == false)
 	{
@@ -40,9 +41,9 @@ void COOPViewerWidget::draw()
 		std::list<rg_Point3D> shortestLinkCoord;
 
 
-		for (auto& rsoID : momentNShortestLinkRSOsID)
+		for (auto& RSOID : momentNShortestLinkRSOsID)
 		{
-			MinimalRSO* currRSO = pManager->find_RSO_from_ID(rsoID);
+			MinimalRSO* currRSO = pManager->find_RSO_from_ID(RSOID);
 			shortestLinkCoord.push_back(currRSO->get_coord());
 		}
 
@@ -60,6 +61,34 @@ void COOPViewerWidget::draw()
 		draw_line(lastCoord / 100, destCoord / 100, 5, RED);
 		draw_sphere(destCoord / 100, 1, PINK);
 
+	}
+	
+	
+	
+	if (pOrbitTunnel != nullptr)
+	{
+		draw_sphere(rg_Point3D(0, 0, 64), 1, RED);
+		int index = 0;
+		for (const auto& orbit_tunnel : pOrbitTunnel->get_orbit_tunnels())
+		{
+			rg_Point3D lastCoord = orbit_tunnel.spine.front();
+			for (const auto& spineCoord : orbit_tunnel.spine)
+			{
+				draw_line(lastCoord / 100, spineCoord / 100, 5, BLACK);
+				lastCoord = spineCoord;
+			}
+
+
+			std::list<rg_Point3D> tunnelCoord;
+			for (const auto& RSOID : orbit_tunnel.tunnelRSOsID)
+			{
+				MinimalRSO* currRSO = pManager->find_RSO_from_ID(RSOID);
+				draw_point(currRSO->get_coord() / 100, 9, RED);
+			}
+			++index;
+			if (index == 2)
+				break;
+		}
 	}
 }
 

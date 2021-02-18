@@ -105,6 +105,7 @@
     <ClCompile Include="COOPViewerWidget.cpp" />
     <ClCompile Include="MinimalRSO.cpp" />
     <ClCompile Include="OrbitShortestLink.cpp" />
+    <ClCompile Include="OrbitTunnel.cpp" />
     <ClCompile Include="RSOManager.cpp" />
     <QtRcc Include="COOPViewer.qrc" />
     <QtUic Include="COOPViewer.ui" />
@@ -117,6 +118,7 @@
     <ClInclude Include="constForCOOP.h" />
     <ClInclude Include="MinimalRSO.h" />
     <ClInclude Include="OrbitShortestLink.h" />
+    <ClInclude Include="OrbitTunnel.h" />
     <ClInclude Include="RSOManager.h" />
   </ItemGroup>
   <ItemGroup>

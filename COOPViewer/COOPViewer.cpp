@@ -227,17 +227,27 @@ void COOPViewer::load_shortest_link()
 	string filePath = translate_to_window_path(QfilePath);
 	m_orbitShorestLink.load_orbit_shortest_link(filePath);
 	
-
-
-	//m_shortest_links = { 44238, 47145, 47164, 47175, 47181, 47144, 47128, 46137, 47147, 44968, 45737, 46774, 44928, 47372, 47381 };
-	/////TODO
-	//ui.openglWidget->set_shortest_links(m_shortest_links); -> 
-	/////TODO
 	ui.openglWidget->set_shortest_links(&m_orbitShorestLink);
 	ui.openglWidget->update();
 
 	update_time_info();
 	update();
+}
+
+void COOPViewer::load_orbit_tunnel()
+{
+	QString QfilePath = QFileDialog::getOpenFileName(this, tr("Open Prediction Command File"), NULL, tr("Prediction Command file (*.txt)"));
+	string filePath = translate_to_window_path(QfilePath);
+
+	m_orbitTunnel.load_orbit_tunnel(filePath);
+	
+	
+	ui.openglWidget->set_orbit_tunnel(&m_orbitTunnel);
+	ui.openglWidget->update();
+
+	update_time_info();
+	update();
+
 }
 
 

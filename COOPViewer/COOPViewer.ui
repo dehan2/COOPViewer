@@ -99,6 +99,29 @@
            </widget>
           </item>
           <item>
+           <widget class="QGroupBox" name="groupBox_5">
+            <property name="title">
+             <string>Load Tunnel Files</string>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_10">
+             <item>
+              <widget class="QPushButton" name="pushButton_3">
+               <property name="text">
+                <string>PushButton</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButton_4">
+               <property name="text">
+                <string>2. Load Tunnel</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
            <widget class="QGroupBox" name="groupBox_2">
             <property name="title">
              <string>Control</string>
@@ -611,7 +634,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>921</x>
-     <y>271</y>
+     <y>332</y>
     </hint>
     <hint type="destinationlabel">
      <x>1102</x>
@@ -627,7 +650,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>943</x>
-     <y>294</y>
+     <y>355</y>
     </hint>
     <hint type="destinationlabel">
      <x>1104</x>
@@ -643,7 +666,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>1004</x>
-     <y>284</y>
+     <y>345</y>
     </hint>
     <hint type="destinationlabel">
      <x>1106</x>
@@ -659,7 +682,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>1050</x>
-     <y>288</y>
+     <y>349</y>
     </hint>
     <hint type="destinationlabel">
      <x>1103</x>
@@ -675,7 +698,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>985</x>
-     <y>271</y>
+     <y>332</y>
     </hint>
     <hint type="destinationlabel">
      <x>1101</x>
@@ -691,7 +714,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>847</x>
-     <y>271</y>
+     <y>332</y>
     </hint>
     <hint type="destinationlabel">
      <x>1104</x>
@@ -707,7 +730,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>783</x>
-     <y>271</y>
+     <y>332</y>
     </hint>
     <hint type="destinationlabel">
      <x>1101</x>
@@ -723,7 +746,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>1045</x>
-     <y>260</y>
+     <y>321</y>
     </hint>
     <hint type="destinationlabel">
      <x>1099</x>
@@ -739,7 +762,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>1024</x>
-     <y>362</y>
+     <y>423</y>
     </hint>
     <hint type="destinationlabel">
      <x>1102</x>
@@ -811,6 +834,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton_4</sender>
+   <signal>clicked()</signal>
+   <receiver>COOPViewerClass</receiver>
+   <slot>load_orbit_tunnel()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1029</x>
+     <y>223</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1118</x>
+     <y>342</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>load_prediction_command()</slot>
@@ -825,5 +864,6 @@
   <slot>PPDB_row_selected(QModelIndex)</slot>
   <slot>load_starlink()</slot>
   <slot>load_shortest_link()</slot>
+  <slot>load_orbit_tunnel()</slot>
  </slots>
 </ui>

@@ -7,9 +7,9 @@ OrbitShortestLink::OrbitShortestLink()
 {
 }
 
-void OrbitShortestLink::load_orbit_shortest_link(const string& filePath)
+void OrbitShortestLink::load_orbit_shortest_link(const std::string& filePath)
 {
-	ifstream fin;
+	std::ifstream fin;
 	fin.open(filePath.c_str());
 	if (fin.is_open())
 	{
