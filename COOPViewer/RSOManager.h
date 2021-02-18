@@ -25,21 +25,28 @@ private:
 
 	map<int, double> m_mapFromIDToVelocityUpdatedTime;
 
+	list<int> m_objectOfInterestIDs;
+
 	int m_targetCatalogID;
 	list<pair<rg_Point3D, tm>> m_wayPoints;
 
 	PredictionCommand m_command;
 
+	list<TCAReport> m_PPDBInfos;
+
+
 public:
 	RSOManager() = default;
-	~RSOManager() {	clear();	};
+	~RSOManager() {	clear();}
 
 	void clear();
 
 	list<MinimalRSO>& get_RSOs() { return m_RSOs; }
 	inline const cJulian& get_epoch() { return m_startMomentOfPredictionTimeWindow; }
 	const PredictionCommand& get_prediction_command() { return m_command; }
+	const list<TCAReport>& get_PPDB_infos() { return m_PPDBInfos; }
 
+	list<int>* get_objectOfInterestIDs() { return &m_objectOfInterestIDs; }
 
 	void read_prediction_command_file(const string& filePath);
 	void initialize_RSO_manager(const PredictionCommand& command);
@@ -70,11 +77,15 @@ public:
 
 	void save_RSO_infos(const string& filePath);
 
-	tm convert_given_moment_to_tm(const double& givenMoment);
-
-	void generate_maneuver_plan(const int& targetCatalogID, const double& rotationAngle, const double& startTime, const double& endTime, const int& numSegments);
-	void save_maneuver_plan(const string& filePath, const int& targetCatalogID, const double& rotationAngle, const double& startTime, const double& endTime, const int& numSegments);
+	tm convert_given_moment_to_tm(const double& givenMoment) const;
 
 	pair<double, double> find_time_of_closest_approach_for_RSO_pair(int primaryID, int secondaryID, int targetTime, double searchInterval, double resolution);
+
+	list<MinimalRSO*> find_object_of_interests();
+	double calculate_OOI_distance();
+	
+	void load_PPDB(const string& filePath);
+
+	string make_time_string(const double& givenMoment);
 };
 

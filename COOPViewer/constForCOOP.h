@@ -89,11 +89,17 @@ const gravconsttype GRAV_CONST_TYPE = wgs84;
 
 const float OVERLAP_THRESHOLD = 1.0e-3;
 
-struct OutlierInfo
+
+
+struct TCAReport
 {
 	int ID;
-	int primary;
-	int secondary;
+	int primaryID;
+	int secondaryID;
+	double distanceOfClosestApproach;
+	double timeOfClosestApproach;
+	double closeApproachEnteringTime;
+	double closeApproachLeavingTime;
 	int year, mon, day, hour, min;
 	float sec, distance;
 	string tag;
@@ -129,3 +135,12 @@ struct ErrorAnalysisReport2
 	list<float> L2C;
 	list<float> C2K;
 };
+
+
+const int NUM_COL_PPDB = 6;
+const int COL_PPDB_PRIMARY = 0;
+const int COL_PPDB_SECONDARY = 1;
+const int COL_PPDB_DCA = 2;
+const int COL_PPDB_TCA = 3;
+const int COL_PPDB_CASTART = 4;
+const int COL_PPDB_CAEND = 5;

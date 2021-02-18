@@ -7,6 +7,8 @@
 #include "RSOManager.h"
 #include "OrbitShortestLink.h"
 #include <QTimer>
+#include <QStandardItemModel>
+#include <map>
 
 #include <vector>
 
@@ -30,7 +32,14 @@ public:
 
     int milisecPerAnimation = 100;
 
+<<<<<<< HEAD
     vector<int> m_shortest_links;
+=======
+    QStandardItemModel m_PPDBModel;
+    int targetRSOID = -1;
+
+    map<int, const TCAReport*> m_mapFromPPDBRowToTCAReport;
+>>>>>>> 93c981962ed8f4b646aaf8b22d4191050a2357a3
 
 public:
     void update_time_info();
@@ -38,11 +47,18 @@ public:
     double change_time_by_given_increment(const double& givenIncrement);
     double check_validity_of_given_time(const double& givenTime);
 
+    void update_distance_of_OOI_string();
+
+    void add_PPDB_table_header();
+    void adjust_PPDB_column_width();
+    void update_PPDB_table();
+
 private:
     Ui::COOPViewerClass ui;
 
 public slots:
     void load_prediction_command();
+    void load_PPDB_file();
     void play_simulation();
 
     //SH
@@ -58,4 +74,7 @@ public slots:
 
     inline void go_to_start_moment() { change_time_to_given_moment(0); }
     inline void go_to_end_moment() { change_time_to_given_moment(m_manager.get_prediction_command().predictionTimeWindow); }
+
+    void objectOfInterest_changed();
+    void PPDB_row_selected(QModelIndex index);
 };
