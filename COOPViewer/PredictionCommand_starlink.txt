@@ -1,0 +1,2 @@
+# Directory TLEFile NumObjects NumLineSeg TimeWindow EpochYear Mon Day Hour Min Sec 
+.\SPDBTester\ starlink_210220.tle 0 1000 1.0e-3 240 2021 02 21 0 0 0 
