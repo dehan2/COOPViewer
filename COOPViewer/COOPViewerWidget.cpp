@@ -20,7 +20,7 @@ void COOPViewerWidget::draw()
 {
 	//Drawing scale: 1/100
 
-	//draw_sphere(rg_Point3D(0, 0, 0), 64, BLUE);
+	draw_sphere(rg_Point3D(0, 0, 0), 64, BLUE);
 
 	if (pManager != nullptr && pManager->get_RSOs().empty() == false)
 	{
@@ -29,12 +29,50 @@ void COOPViewerWidget::draw()
 			rg_Point3D& coord = rso.get_coord();
 			draw_point(coord / 100, 5, GREEN);
 		}
-		if (pManager->get_objectOfInterestIDs()->empty() == false)
-			draw_line_among_OOIs();
 	}
 
+	if (pMode != nullptr)
+	{
+		switch (*pMode)
+		{
+		case COOP_OPERATION_MODE::PPDB:
+			draw_PPDB();
+			break;
+		case COOP_OPERATION_MODE::TPDB:
+			draw_TPDB();
+			break;
+		case COOP_OPERATION_MODE::SPDB:
+			draw_SPDB();
+			break;
+		case COOP_OPERATION_MODE::EVAL_SAFETY:
+			draw_eval_safety();
+			break;
+		default:
+			break;
+		}
+	}
+}
 
 
+
+void COOPViewerWidget::draw_PPDB()
+{
+	if (pManager->get_objectOfInterestIDs()->empty() == false)
+		draw_line_among_OOIs();
+}
+
+
+
+void COOPViewerWidget::draw_TPDB()
+{
+	if (pManager->get_objectOfInterestIDs()->empty() == false)
+		draw_line_among_OOIs();
+}
+
+
+
+void COOPViewerWidget::draw_SPDB()
+{
 	if (pShortestLink != nullptr)
 	{
 		const std::list<int> momentNShortestLinkRSOsID = pShortestLink->find_shortest_link_RSOs_ID_in_closest_moment(m_currentTime);
@@ -62,9 +100,12 @@ void COOPViewerWidget::draw()
 		draw_sphere(destCoord / 100, 1, PINK);
 
 	}
-	
-	
-	
+}
+
+
+
+void COOPViewerWidget::draw_eval_safety()
+{
 	if (pOrbitTunnel != nullptr)
 	{
 		draw_sphere(rg_Point3D(0, 0, 64), 1, RED);

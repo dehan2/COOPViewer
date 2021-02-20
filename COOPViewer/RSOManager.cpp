@@ -769,6 +769,30 @@ double RSOManager::calculate_OOI_distance()
 
 
 
+double RSOManager::calculate_circle_of_OOI_radius()
+{
+	//Note : NEED TO BE UPDATED - 210220
+
+	if (m_objectOfInterestIDs.size() == 3)
+	{
+		list<MinimalRSO*> OOIs = find_object_of_interests();
+
+		MinimalRSO* primary = OOIs.front();
+		MinimalRSO* secondary = OOIs.back();
+
+		double distance = 0;
+
+		if (primary != nullptr && secondary != nullptr)
+			distance = primary->get_coord().distance(secondary->get_coord());
+
+		return distance;
+	}
+	else
+		return 0;
+}
+
+
+
 void RSOManager::load_PPDB(const string& filePath)
 {
 	ifstream fin;
@@ -801,6 +825,42 @@ void RSOManager::load_PPDB(const string& filePath)
 	}
 	fin.close();
 }
+
+
+
+void RSOManager::load_TPDB(const string& filePath)
+{
+	ifstream fin;
+	fin.open(filePath);
+
+	int ID = 0;
+
+	if (fin.is_open())
+	{
+		string line;
+		while (getline(fin, line))
+		{
+			if (line.size() > 0)
+			{
+				istringstream iss(line);
+				string token;
+				iss >> token;
+				if (token.compare("%") != 0)
+				{
+					TPDBReport entity;
+					entity.ID = ++ID;
+					entity.primaryID = stoi(token);
+					iss >> entity.secondaryID >> entity.tertiaryID >> entity.minRadius >> entity.time >> entity.year >> entity.mon >> entity.day >> entity.hour >> entity.min >> entity.sec;
+					m_TPDBInfos.push_back(entity);
+				}
+			}
+			else
+				break;
+		}
+	}
+	fin.close();
+}
+
 
 
 

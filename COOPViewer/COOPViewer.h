@@ -10,7 +10,7 @@
 #include <QTimer>
 #include <QStandardItemModel>
 #include <map>
-
+#include <string>
 #include <vector>
 
 using std::vector;
@@ -35,13 +35,14 @@ public:
     int milisecPerAnimation = 100;
 
 
-    vector<int> m_shortest_links;
-
     QStandardItemModel m_PPDBModel;
+    QStandardItemModel m_TPDBModel;
     int targetRSOID = -1;
 
     map<int, const TCAReport*> m_mapFromPPDBRowToTCAReport;
+    map<int, const TPDBReport*> m_mapFromTPDBRowToReport;
 
+    COOP_OPERATION_MODE m_mode = COOP_OPERATION_MODE::PPDB;
 
 public:
     void update_time_info();
@@ -49,11 +50,30 @@ public:
     double change_time_by_given_increment(const double& givenIncrement);
     double check_validity_of_given_time(const double& givenTime);
 
-    void update_distance_of_OOI_string();
+    void update_status_message();
+    void update_status_message_for_PPDB();
+    void update_status_message_for_TPDB();
+    void update_status_message_for_SPDB();
+    void update_status_message_for_eval_safety();
 
     void add_PPDB_table_header();
     void adjust_PPDB_column_width();
     void update_PPDB_table();
+
+
+	void add_TPDB_table_header();
+	void adjust_TPDB_column_width();
+	void update_TPDB_table();
+
+
+    void modify_objects_of_interest(const list<int>& OOIs);
+    
+    string generate_status_message_for_PPDB();
+    string generate_status_message_for_TPDB();
+    string generate_status_message_for_SPDB();
+    string generate_status_message_for_eval_safety();
+
+    void change_mode_selection();
 
 private:
     Ui::COOPViewerClass ui;
@@ -61,6 +81,7 @@ private:
 public slots:
     void load_prediction_command();
     void load_PPDB_file();
+    void load_TPDB_file();
     void play_simulation();
 
     
@@ -78,6 +99,8 @@ public slots:
     inline void go_to_start_moment() { change_time_to_given_moment(0); }
     inline void go_to_end_moment() { change_time_to_given_moment(m_manager.get_prediction_command().predictionTimeWindow); }
 
-    void objectOfInterest_changed();
-    void PPDB_row_selected(QModelIndex index);
+	void update_PPDB_selection_in_table(QModelIndex selectedRow);
+	void update_TPDB_selection_in_table(QModelIndex selectedRow);
+
+    void mode_selection_changed();
 };

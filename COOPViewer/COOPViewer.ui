@@ -55,66 +55,34 @@
           <item>
            <widget class="QGroupBox" name="groupBox">
             <property name="title">
-             <string>Load PPDB Files</string>
+             <string>Load Files</string>
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_2">
              <item>
               <widget class="QPushButton" name="pushButton_load_prediction_command">
                <property name="text">
-                <string>1. Load Prediction Command</string>
+                <string>1.Prediction Command</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QPushButton" name="pushButton_load_PPDB">
                <property name="text">
-                <string>2. Load PPDB</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item>
-           <widget class="QGroupBox" name="groupBox_4">
-            <property name="title">
-             <string>Load Shortest Path Files</string>
-            </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_9">
-             <item>
-              <widget class="QPushButton" name="pushButton">
-               <property name="text">
-                <string>1. Load STARLINK TLE</string>
+                <string>2.PPDB</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="pushButton_2">
+              <widget class="QPushButton" name="pushButton_load_TPDB">
                <property name="text">
-                <string>2. Load Shoretst Path</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item>
-           <widget class="QGroupBox" name="groupBox_5">
-            <property name="title">
-             <string>Load Tunnel Files</string>
-            </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_10">
-             <item>
-              <widget class="QPushButton" name="pushButton_3">
-               <property name="text">
-                <string>PushButton</string>
+                <string>3.TPDB</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="pushButton_4">
+              <widget class="QPushButton" name="pushButton_load_SPDB">
                <property name="text">
-                <string>2. Load Tunnel</string>
+                <string>4.SPDB</string>
                </property>
               </widget>
              </item>
@@ -326,107 +294,73 @@
           <item>
            <widget class="QGroupBox" name="groupBox_3">
             <property name="title">
-             <string>Objects-of-Interest</string>
+             <string>COOP Mode</string>
             </property>
-            <layout class="QVBoxLayout" name="verticalLayout_3">
+            <layout class="QHBoxLayout" name="horizontalLayout_6">
              <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_6">
-               <item>
-                <widget class="QLabel" name="label_3">
-                 <property name="text">
-                  <string>Primary</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="lineEdit_primaryID">
-                 <property name="maximumSize">
-                  <size>
-                   <width>60</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLabel" name="label_4">
-                 <property name="text">
-                  <string>Secondary</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="lineEdit_secondaryID">
-                 <property name="maximumSize">
-                  <size>
-                   <width>60</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="pushButton_updateOOI">
-                 <property name="maximumSize">
-                  <size>
-                   <width>50</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                 <property name="text">
-                  <string>Update</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QPushButton" name="pushButton_clearOOI">
-                 <property name="maximumSize">
-                  <size>
-                   <width>40</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                 <property name="text">
-                  <string>Clear</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
+              <widget class="QRadioButton" name="radioButton_selectPPDB">
+               <property name="text">
+                <string>PPDB</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
              </item>
              <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_7">
-               <item>
-                <widget class="QLabel" name="label_5">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>60</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                 <property name="text">
-                  <string>Distance: </string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLabel" name="label_distanceOfOOI">
-                 <property name="text">
-                  <string>0 km</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
+              <widget class="QRadioButton" name="radioButton_selectTPDB">
+               <property name="text">
+                <string>TPDB</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="radioButton_selectSPDB">
+               <property name="text">
+                <string>Shortest Path</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="radioButton_selectSafetyEval">
+               <property name="text">
+                <string>Safety Evaluation</string>
+               </property>
+              </widget>
              </item>
             </layout>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>10</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_printStatus">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>100</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Welcome to COOP Program.</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+            </property>
            </widget>
           </item>
           <item>
@@ -479,7 +413,7 @@
       </property>
       <widget class="QWidget" name="tab_3">
        <attribute name="title">
-        <string>PPDB</string>
+        <string>PPDB &amp; TPDB Data</string>
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout_8">
         <item>
@@ -496,76 +430,7 @@
          </widget>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_5">
-          <item>
-           <widget class="QLabel" name="label_6">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>100</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Target RSO ID</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="lineEdit_targetRSOID">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>100</width>
-              <height>16777215</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushButton_searchRSO">
-            <property name="maximumSize">
-             <size>
-              <width>100</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Search</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushButton_searchRSO_clear">
-            <property name="text">
-             <string>Clear</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="verticalSpacer_2">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
+         <widget class="QTableView" name="tableView_TPDBData"/>
         </item>
        </layout>
       </widget>
@@ -617,7 +482,7 @@
    <slot>load_prediction_command()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>895</x>
+     <x>838</x>
      <y>117</y>
     </hint>
     <hint type="destinationlabel">
@@ -633,8 +498,8 @@
    <slot>play_simulation()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>921</x>
-     <y>332</y>
+     <x>916</x>
+     <y>210</y>
     </hint>
     <hint type="destinationlabel">
      <x>1102</x>
@@ -649,8 +514,8 @@
    <slot>time_step_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>943</x>
-     <y>355</y>
+     <x>968</x>
+     <y>238</y>
     </hint>
     <hint type="destinationlabel">
      <x>1104</x>
@@ -665,8 +530,8 @@
    <slot>time_step_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1004</x>
-     <y>345</y>
+     <x>1024</x>
+     <y>238</y>
     </hint>
     <hint type="destinationlabel">
      <x>1106</x>
@@ -681,8 +546,8 @@
    <slot>time_step_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1050</x>
-     <y>349</y>
+     <x>1080</x>
+     <y>238</y>
     </hint>
     <hint type="destinationlabel">
      <x>1103</x>
@@ -697,8 +562,8 @@
    <slot>increase_time_by_step()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>985</x>
-     <y>332</y>
+     <x>986</x>
+     <y>210</y>
     </hint>
     <hint type="destinationlabel">
      <x>1101</x>
@@ -713,8 +578,8 @@
    <slot>decrease_time_by_step()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>847</x>
-     <y>332</y>
+     <x>836</x>
+     <y>210</y>
     </hint>
     <hint type="destinationlabel">
      <x>1104</x>
@@ -729,8 +594,8 @@
    <slot>go_to_start_moment()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>783</x>
-     <y>332</y>
+     <x>766</x>
+     <y>210</y>
     </hint>
     <hint type="destinationlabel">
      <x>1101</x>
@@ -745,28 +610,12 @@
    <slot>go_to_end_moment()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1045</x>
-     <y>321</y>
+     <x>1056</x>
+     <y>210</y>
     </hint>
     <hint type="destinationlabel">
      <x>1099</x>
      <y>225</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButton_updateOOI</sender>
-   <signal>clicked()</signal>
-   <receiver>COOPViewerClass</receiver>
-   <slot>objectOfInterest_changed()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1024</x>
-     <y>423</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1102</x>
-     <y>375</y>
     </hint>
    </hints>
   </connection>
@@ -777,7 +626,7 @@
    <slot>load_PPDB_file()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>953</x>
+     <x>915</x>
      <y>103</y>
     </hint>
     <hint type="destinationlabel">
@@ -787,46 +636,14 @@
    </hints>
   </connection>
   <connection>
-   <sender>tableView_PPDBData</sender>
-   <signal>doubleClicked(QModelIndex)</signal>
-   <receiver>COOPViewerClass</receiver>
-   <slot>PPDB_row_selected(QModelIndex)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>944</x>
-     <y>754</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1102</x>
-     <y>537</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButton</sender>
-   <signal>clicked()</signal>
-   <receiver>COOPViewerClass</receiver>
-   <slot>load_starlink()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>866</x>
-     <y>162</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1110</x>
-     <y>758</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButton_2</sender>
+   <sender>pushButton_load_SPDB</sender>
    <signal>clicked()</signal>
    <receiver>COOPViewerClass</receiver>
    <slot>load_shortest_link()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>978</x>
-     <y>162</y>
+     <x>1081</x>
+     <y>117</y>
     </hint>
     <hint type="destinationlabel">
      <x>1112</x>
@@ -835,18 +652,114 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton_4</sender>
+   <sender>radioButton_selectPPDB</sender>
    <signal>clicked()</signal>
    <receiver>COOPViewerClass</receiver>
-   <slot>load_orbit_tunnel()</slot>
+   <slot>mode_selection_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1029</x>
-     <y>223</y>
+     <x>771</x>
+     <y>283</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1118</x>
-     <y>342</y>
+     <x>1111</x>
+     <y>353</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButton_selectTPDB</sender>
+   <signal>clicked()</signal>
+   <receiver>COOPViewerClass</receiver>
+   <slot>mode_selection_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>819</x>
+     <y>284</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1115</x>
+     <y>380</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButton_selectSPDB</sender>
+   <signal>clicked()</signal>
+   <receiver>COOPViewerClass</receiver>
+   <slot>mode_selection_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>925</x>
+     <y>289</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1107</x>
+     <y>411</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButton_selectSafetyEval</sender>
+   <signal>clicked()</signal>
+   <receiver>COOPViewerClass</receiver>
+   <slot>mode_selection_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>989</x>
+     <y>293</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1111</x>
+     <y>472</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tableView_PPDBData</sender>
+   <signal>doubleClicked(QModelIndex)</signal>
+   <receiver>COOPViewerClass</receiver>
+   <slot>update_PPDB_selection_in_table(QModelIndex)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>553</x>
+     <y>631</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1108</x>
+     <y>604</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>tableView_TPDBData</sender>
+   <signal>doubleClicked(QModelIndex)</signal>
+   <receiver>COOPViewerClass</receiver>
+   <slot>update_TPDB_selection_in_table(QModelIndex)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>859</x>
+     <y>644</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1112</x>
+     <y>679</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_load_TPDB</sender>
+   <signal>clicked()</signal>
+   <receiver>COOPViewerClass</receiver>
+   <slot>load_TPDB_file()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>976</x>
+     <y>103</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1115</x>
+     <y>81</y>
     </hint>
    </hints>
   </connection>
@@ -861,9 +774,12 @@
   <slot>go_to_end_moment()</slot>
   <slot>objectOfInterest_changed()</slot>
   <slot>load_PPDB_file()</slot>
-  <slot>PPDB_row_selected(QModelIndex)</slot>
+  <slot>update_PPDB_selection_in_table(QModelIndex)</slot>
   <slot>load_starlink()</slot>
   <slot>load_shortest_link()</slot>
   <slot>load_orbit_tunnel()</slot>
+  <slot>mode_selection_changed()</slot>
+  <slot>update_TPDB_selection_in_table(QModelIndex)</slot>
+  <slot>load_TPDB_file()</slot>
  </slots>
 </ui>

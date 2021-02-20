@@ -106,6 +106,19 @@ struct TCAReport
 };
 
 
+struct TPDBReport
+{
+	int ID;
+	int primaryID;
+	int secondaryID;
+	int tertiaryID;
+	double minRadius;
+	double time;
+	int year, mon, day, hour, min;
+	float sec;
+};
+
+
 
 struct ErrorAnalysisReport
 {
@@ -144,3 +157,10 @@ const int COL_PPDB_DCA = 2;
 const int COL_PPDB_TCA = 3;
 const int COL_PPDB_CASTART = 4;
 const int COL_PPDB_CAEND = 5;
+
+//enum class 
+
+enum class COOP_OPERATION_MODE
+{
+	PPDB, TPDB, SPDB, EVAL_SAFETY
+};
