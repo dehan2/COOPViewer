@@ -21,10 +21,14 @@ void OrbitShortestLink::load_orbit_shortest_link(const std::string& filePath)
 			getline(fin, line);
 			std::stringstream ss(line);
 			//TOKENIZE
-			while (getline(ss, token, '\t')) {
+
+			while (getline(ss, token, '\t')) 
+			{
 				result.push_back(token);
 			}
-			if (!result.empty())
+
+
+			if (!result.empty() && result[0] != "%")
 			{
 				if (result[0] == "SOURCE_LOCAL_COORDINATE")
 				{
@@ -36,24 +40,60 @@ void OrbitShortestLink::load_orbit_shortest_link(const std::string& filePath)
 				}
 				else
 				{
+					int pathID = stoi(result[0]);
+					result.erase(result.begin());
+
+					double pathLength = stod(result[0]);
+					result.erase(result.begin());
+
 					double moment = stod(result[0]);
 					result.erase(result.begin());
+
+					double year = stod(result[0]);
+					result.erase(result.begin());
+
+					double month = stod(result[0]);
+					result.erase(result.begin());
+
+					double day = stod(result[0]);
+					result.erase(result.begin());
+
+					double hour = stod(result[0]);
+					result.erase(result.begin());
+
+					double min = stod(result[0]);
+					result.erase(result.begin());
+
+					double sec = stod(result[0]);
+					result.erase(result.begin());
+
 					std::list<int> RSOsID;
 					for (auto& ID : result)
 					{
 						RSOsID.push_back(stoi(ID));
 					}
-					m_momentNShortestLinkRSOsID.push_back({ moment,RSOsID });
+					m_momentNShortestLinkRSOsID.push_back({ moment, pathLength, RSOsID });
 				}
-			}
-			else
-			{
-				break;
 			}
 			//TOKENIZE
 		}
 	}
 }
+
+
+
+const MomentNShortestLinkRSOsID* OrbitShortestLink::find_shortest_path_imminent_to_moment(const double& targetMoment)
+{
+	for (const auto& momentNShortestLinkRSOsID : m_momentNShortestLinkRSOsID)
+	{
+		if (momentNShortestLinkRSOsID.moment > targetMoment)
+			return &momentNShortestLinkRSOsID;
+	}
+
+	return &m_momentNShortestLinkRSOsID.back();
+}
+
+
 
 const std::list<int>& OrbitShortestLink::find_shortest_link_RSOs_ID_in_closest_moment(const double& targetMoment)
 {

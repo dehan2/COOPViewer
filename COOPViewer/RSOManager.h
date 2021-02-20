@@ -33,6 +33,7 @@ private:
 	PredictionCommand m_command;
 
 	list<TCAReport> m_PPDBInfos;
+	list<TPDBReport> m_TPDBInfos;
 
 
 public:
@@ -45,6 +46,8 @@ public:
 	inline const cJulian& get_epoch() { return m_startMomentOfPredictionTimeWindow; }
 	const PredictionCommand& get_prediction_command() { return m_command; }
 	const list<TCAReport>& get_PPDB_infos() { return m_PPDBInfos; }
+	const list<TPDBReport>& get_TPDB_infos() { return m_TPDBInfos; }
+
 
 	list<int>* get_objectOfInterestIDs() { return &m_objectOfInterestIDs; }
 
@@ -83,8 +86,10 @@ public:
 
 	list<MinimalRSO*> find_object_of_interests();
 	double calculate_OOI_distance();
+	double calculate_circle_of_OOI_radius();
 	
 	void load_PPDB(const string& filePath);
+	void load_TPDB(const string& filePath);
 
 	string make_time_string(const double& givenMoment);
 };
