@@ -5,21 +5,38 @@
 #include <QDate>
 #include <QTime>
 #include <QTableView>
+#include <sstream>
 
 COOPViewer::COOPViewer(QWidget* parent)
 	: QMainWindow(parent), m_simulationTimer(this)
 {
     ui.setupUi(this);
 
+
+
 	add_PPDB_table_header();
 	ui.tableView_PPDBData->setModel(&m_PPDBModel);
 	ui.tableView_PPDBData->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	adjust_PPDB_column_width();
 
-	//ui.tableView_PPDBData->resizeColumnsToContents();
 	ui.tableView_PPDBData->resizeRowsToContents();
 	ui.tableView_PPDBData->setSelectionBehavior(QAbstractItemView::SelectRows);
 	ui.tableView_PPDBData->setSelectionMode(QAbstractItemView::SingleSelection);
+
+
+
+
+	add_TPDB_table_header();
+	ui.tableView_TPDBData->setModel(&m_TPDBModel);
+	ui.tableView_TPDBData->setEditTriggers(QAbstractItemView::NoEditTriggers);
+	adjust_TPDB_column_width();
+
+	ui.tableView_TPDBData->resizeRowsToContents();
+	ui.tableView_TPDBData->setSelectionBehavior(QAbstractItemView::SelectRows);
+	ui.tableView_TPDBData->setSelectionMode(QAbstractItemView::SingleSelection);
+
+
+
 
 	time_step_changed();
 
@@ -43,7 +60,7 @@ void COOPViewer::update_time_info()
 
 
 	ui.openglWidget->set_current_time(m_currentTime);
-	update_distance_of_OOI_string();
+	update_status_message();
 	update();
 }
 
@@ -89,11 +106,65 @@ double COOPViewer::check_validity_of_given_time(const double& givenTime)
 
 
 
-void COOPViewer::update_distance_of_OOI_string()
+void COOPViewer::update_status_message()
 {
-	double distance = m_manager.calculate_OOI_distance();
-	string distanceStr = to_string(distance) + string(" km");
-	ui.label_distanceOfOOI->setText(QString::fromStdString(distanceStr));
+	switch (m_mode)
+	{
+	case COOP_OPERATION_MODE::PPDB:
+		update_status_message_for_PPDB();
+		break;
+	case COOP_OPERATION_MODE::TPDB:
+		update_status_message_for_TPDB();
+		break;
+	case COOP_OPERATION_MODE::SPDB:
+		update_status_message_for_SPDB();
+		break;
+	case COOP_OPERATION_MODE::EVAL_SAFETY:
+		update_status_message_for_eval_safety();
+		break;
+	default:
+		break;
+	}
+}
+
+
+
+void COOPViewer::update_status_message_for_PPDB()
+{
+	if (m_manager.get_objectOfInterestIDs()->size() == 2)
+	{
+		string msgForPPDB = generate_status_message_for_PPDB();
+		ui.label_printStatus->setText(QString::fromStdString(msgForPPDB));
+	}
+}
+
+
+
+void COOPViewer::update_status_message_for_TPDB()
+{
+	if (m_manager.get_objectOfInterestIDs()->size() == 3)
+	{
+		string msgForTPDB = generate_status_message_for_TPDB();
+		ui.label_printStatus->setText(QString::fromStdString(msgForTPDB));
+	}
+}
+
+
+
+void COOPViewer::update_status_message_for_SPDB()
+{
+	if (!m_orbitShorestLink.get_shortest_paths().empty())
+	{
+		string msgForSPDB = generate_status_message_for_SPDB();
+		ui.label_printStatus->setText(QString::fromStdString(msgForSPDB));
+	}
+}
+
+
+
+void COOPViewer::update_status_message_for_eval_safety()
+{
+
 }
 
 
@@ -116,9 +187,9 @@ void COOPViewer::adjust_PPDB_column_width()
 	ui.tableView_PPDBData->setColumnWidth(COL_PPDB_PRIMARY, 100);
 	ui.tableView_PPDBData->setColumnWidth(COL_PPDB_SECONDARY, 100);
 	ui.tableView_PPDBData->setColumnWidth(COL_PPDB_DCA, 100);
-	ui.tableView_PPDBData->setColumnWidth(COL_PPDB_TCA, 120);
-	ui.tableView_PPDBData->setColumnWidth(COL_PPDB_CASTART, 120);
-	ui.tableView_PPDBData->setColumnWidth(COL_PPDB_CAEND, 120);
+	ui.tableView_PPDBData->setColumnWidth(COL_PPDB_TCA, 150);
+	ui.tableView_PPDBData->setColumnWidth(COL_PPDB_CASTART, 150);
+	ui.tableView_PPDBData->setColumnWidth(COL_PPDB_CAEND, 150);
 }
 
 
@@ -162,6 +233,158 @@ void COOPViewer::update_PPDB_table()
 
 
 
+void COOPViewer::add_TPDB_table_header()
+{
+	m_TPDBModel.setColumnCount(5);
+	m_TPDBModel.setHeaderData(0, Qt::Horizontal, QObject::tr("Primary"));
+	m_TPDBModel.setHeaderData(1, Qt::Horizontal, QObject::tr("Secondary"));
+	m_TPDBModel.setHeaderData(2, Qt::Horizontal, QObject::tr("Tertiary"));
+	m_TPDBModel.setHeaderData(3, Qt::Horizontal, QObject::tr("Radius(km)"));
+	m_TPDBModel.setHeaderData(4, Qt::Horizontal, QObject::tr("Time"));
+}
+
+
+
+void COOPViewer::adjust_TPDB_column_width()
+{
+	ui.tableView_TPDBData->setColumnWidth(0, 100);
+	ui.tableView_TPDBData->setColumnWidth(1, 100);
+	ui.tableView_TPDBData->setColumnWidth(2, 100);
+	ui.tableView_TPDBData->setColumnWidth(3, 100);
+	ui.tableView_TPDBData->setColumnWidth(4, 150);
+}
+
+
+
+void COOPViewer::update_TPDB_table()
+{
+	int currRow = 0;
+	m_mapFromTPDBRowToReport.clear();
+
+	for (auto& entity : m_manager.get_TPDB_infos())
+	{
+		QStandardItem* currItem = new QStandardItem(1, 5);
+		m_TPDBModel.insertRow(currRow, currItem);
+
+		QModelIndex primaryIndex = m_TPDBModel.index(currRow, 0);
+		QModelIndex secondaryIndex = m_TPDBModel.index(currRow, 1);
+		QModelIndex tertiaryIndex = m_TPDBModel.index(currRow, 2);
+		QModelIndex radiusIndex = m_TPDBModel.index(currRow, 3);
+		QModelIndex timeIndex = m_TPDBModel.index(currRow, 4);
+
+
+		string timeStr = m_manager.make_time_string(entity.time);
+
+		m_TPDBModel.setData(primaryIndex, QString::number(entity.primaryID));
+		m_TPDBModel.setData(secondaryIndex, QString::number(entity.secondaryID));
+		m_TPDBModel.setData(tertiaryIndex, QString::number(entity.tertiaryID));
+		m_TPDBModel.setData(radiusIndex, QString::number(entity.minRadius));
+		m_TPDBModel.setData(timeIndex, QString::fromStdString(timeStr));
+
+		m_mapFromTPDBRowToReport[currRow] = &entity;
+
+		currRow++;
+	}
+}
+
+
+void COOPViewer::modify_objects_of_interest(const list<int>& OOIs)
+{
+	list<int>* OOIIDs = m_manager.get_objectOfInterestIDs();
+	OOIIDs->clear();
+
+	for (auto& OOI : OOIs)
+	{
+		OOIIDs->push_back(OOI);
+	}
+
+	update_status_message();
+	ui.openglWidget->change_view_to_OOI_direction();
+}
+
+
+
+string COOPViewer::generate_status_message_for_PPDB()
+{
+	stringstream message;
+
+	const list<int>* OOIs = m_manager.get_objectOfInterestIDs();
+	int primaryID = OOIs->front();
+	int secondaryID = OOIs->back();
+	double distance = m_manager.calculate_OOI_distance();
+
+	message << "Primary: " << primaryID << ", Secondary: " << secondaryID << ", distance: " <<distance<< "km\n";
+
+	return message.str();
+}
+
+
+
+string COOPViewer::generate_status_message_for_TPDB()
+{
+	stringstream message;
+
+	const list<int>* OOIs = m_manager.get_objectOfInterestIDs();
+	double radius = m_manager.calculate_circle_of_OOI_radius();
+
+	auto it = OOIs->begin();
+
+	message << "Primary: " << (*it++) << ", Secondary: " << (*it++) << ", Tertiary: "<< (*it++)<<", radius: " << radius<<"km\n";
+
+	return message.str();
+}
+
+
+
+string COOPViewer::generate_status_message_for_SPDB()
+{
+	stringstream message;
+
+	auto imminentShortestPath = m_orbitShorestLink.find_shortest_path_imminent_to_moment(m_currentTime);
+	message << "Path length: " << imminentShortestPath->pathLength<<"\n";
+
+	return message.str();
+}
+
+
+
+string COOPViewer::generate_status_message_for_eval_safety()
+{
+	return string();
+}
+
+
+
+
+void COOPViewer::change_mode_selection()
+{
+	ui.radioButton_selectPPDB->setChecked(false);
+	ui.radioButton_selectTPDB->setChecked(false);
+	ui.radioButton_selectSPDB->setChecked(false);
+	ui.radioButton_selectSafetyEval->setChecked(false);
+
+	switch (m_mode)
+	{
+	case COOP_OPERATION_MODE::PPDB:
+		ui.radioButton_selectPPDB->setChecked(true);
+		break;
+	case COOP_OPERATION_MODE::TPDB:
+		ui.radioButton_selectTPDB->setChecked(true);
+		break;
+	case COOP_OPERATION_MODE::SPDB:
+		ui.radioButton_selectSPDB->setChecked(true);
+		break;
+	case COOP_OPERATION_MODE::EVAL_SAFETY:
+		ui.radioButton_selectSafetyEval->setChecked(true);
+		break;
+	default:
+		break;
+	}
+}
+
+
+
+
 //////////////////////////////////////////////////////////////////////////
 // QT SLOTS
 //////////////////////////////////////////////////////////////////////////
@@ -174,6 +397,7 @@ void COOPViewer::load_prediction_command()
 
 	m_manager.read_prediction_command_file(filePath);
 	ui.openglWidget->set_manager(&m_manager);
+	ui.openglWidget->set_mode(&m_mode);
 	ui.openglWidget->update();
 	
 	update_time_info();
@@ -189,6 +413,19 @@ void COOPViewer::load_PPDB_file()
 
 	m_manager.load_PPDB(filePath);
 	update_PPDB_table();
+
+	update();
+}
+
+
+
+void COOPViewer::load_TPDB_file()
+{
+	QString QfilePath = QFileDialog::getOpenFileName(this, tr("Open Prediction Command File"), NULL, tr("Prediction Command file (*.txt)"));
+	string filePath = translate_to_window_path(QfilePath);
+
+	m_manager.load_TPDB(filePath);
+	update_TPDB_table();
 
 	update();
 }
@@ -212,7 +449,8 @@ void COOPViewer::load_starlink()
 	QString QfilePath = QFileDialog::getOpenFileName(this, tr("Open Prediction Command File"), NULL, tr("Prediction Command file (*.txt)"));
 	string filePath = translate_to_window_path(QfilePath);
 
-	m_manager.read_prediction_command_file_STARLINK(filePath);
+	m_manager.read_prediction_command_file(filePath);
+	//m_manager.read_prediction_command_file_STARLINK(filePath);
 	ui.openglWidget->set_manager(&m_manager);
 	ui.openglWidget->update();
 
@@ -286,35 +524,72 @@ void COOPViewer::decrease_time_by_step()
 
 
 
-void COOPViewer::objectOfInterest_changed()
+void COOPViewer::update_PPDB_selection_in_table(QModelIndex selectedRow)
 {
-	list<int>* OOIIDs = m_manager.get_objectOfInterestIDs();
-	OOIIDs->clear();
+	m_mode = COOP_OPERATION_MODE::PPDB;
+	change_mode_selection();
 
-	int primaryID = ui.lineEdit_primaryID->text().toInt();	
-	int secondaryID = ui.lineEdit_secondaryID->text().toInt();
-	OOIIDs->push_back(primaryID);
-	OOIIDs->push_back(secondaryID);
+	const TCAReport* selectedEntity = m_mapFromPPDBRowToTCAReport.at(selectedRow.row());
 
-	update_distance_of_OOI_string();
-	ui.openglWidget->change_view_to_OOI_direction();
+	double TCA = selectedEntity->timeOfClosestApproach;
+	change_time_to_given_moment(TCA);
+
+	list<int> OOIs;
+	OOIs.push_back(selectedEntity->primaryID);
+	OOIs.push_back(selectedEntity->secondaryID);
+	modify_objects_of_interest(OOIs);
 
 	update();
 }
 
 
 
-void COOPViewer::PPDB_row_selected(QModelIndex index)
+void COOPViewer::update_TPDB_selection_in_table(QModelIndex selectedRow)
 {
-	int selectedRow = index.row();
-	const TCAReport* selectedEntity = m_mapFromPPDBRowToTCAReport.at(selectedRow);
+	m_mode = COOP_OPERATION_MODE::TPDB;
+	change_mode_selection();
 
-	double TCA = selectedEntity->timeOfClosestApproach;
-	change_time_to_given_moment(TCA);
+	const TPDBReport* selectedEntity = m_mapFromTPDBRowToReport.at(selectedRow.row());
 
-	ui.lineEdit_primaryID->setText(QString::number(selectedEntity->primaryID));
-	ui.lineEdit_secondaryID->setText(QString::number(selectedEntity->secondaryID));
-	objectOfInterest_changed();
+	double time = selectedEntity->time;
+	change_time_to_given_moment(time);
+
+	list<int> OOIs;
+	OOIs.push_back(selectedEntity->primaryID);
+	OOIs.push_back(selectedEntity->secondaryID);
+	OOIs.push_back(selectedEntity->tertiaryID);
+	modify_objects_of_interest(OOIs);
 
 	update();
+}
+
+
+
+void COOPViewer::mode_selection_changed()
+{
+	if (ui.radioButton_selectPPDB->isChecked())
+	{
+		m_mode = COOP_OPERATION_MODE::PPDB;
+
+	}
+	else if (ui.radioButton_selectTPDB->isChecked())
+	{
+		m_mode = COOP_OPERATION_MODE::TPDB;
+
+	}
+
+	if (ui.radioButton_selectSPDB->isChecked())
+	{
+		m_mode = COOP_OPERATION_MODE::SPDB;
+
+	}
+
+	if (ui.radioButton_selectSafetyEval->isChecked())
+	{
+		m_mode = COOP_OPERATION_MODE::EVAL_SAFETY;
+
+	}
+
+	update_status_message();
+	ui.openglWidget->change_view_to_OOI_direction();
 }
