@@ -22,7 +22,7 @@ class COOPViewer : public QMainWindow
 public:
     COOPViewer(QWidget *parent = Q_NULLPTR);
     RSOManager m_manager;
-    
+    RSOManager m_starlinkManager;
     OrbitShortestLink m_orbitShorestLink;
     OrbitTunnel m_orbitTunnel;
 
@@ -44,6 +44,8 @@ public:
 
     COOP_OPERATION_MODE m_mode = COOP_OPERATION_MODE::PPDB;
 
+    int m_queryIndex = 0;
+
 public:
     void update_time_info();
     double change_time_to_given_moment(const double& givenMoment);
@@ -60,10 +62,12 @@ public:
     void adjust_PPDB_column_width();
     void update_PPDB_table();
 
+    
 
 	void add_TPDB_table_header();
 	void adjust_TPDB_column_width();
 	void update_TPDB_table();
+
 
 
     void modify_objects_of_interest(const list<int>& OOIs);
@@ -103,4 +107,7 @@ public slots:
 	void update_TPDB_selection_in_table(QModelIndex selectedRow);
 
     void mode_selection_changed();
+
+    void update_PPDB_n_TPDB_table_Q1();
+    void update_PPDB_n_TPDB_table_Q2();
 };

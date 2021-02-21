@@ -1,10 +1,12 @@
 #include "RSOManager.h"
+#include "constForVDRCOpenGLWidget.h"
 #include "rg_TMatrix3D.h"
-
+#include <direct.h>
 #include <iomanip>
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <QString>
 
 void RSOManager::clear()
 {
@@ -127,7 +129,13 @@ void RSOManager::read_prediction_command_file(const string& filePath)
 
 void RSOManager::initialize_RSO_manager(const PredictionCommand& command)
 {
+	string delimiter = " ";
 	string filePath = command.directory + command.tleFile;
+	filePath.erase(filePath.begin());
+	string resultpath = ".\\result";
+	filePath = resultpath + filePath;
+	QString qstr = QString::fromStdString(filePath);
+	filePath = translate_to_window_path(qstr);
 	load_two_line_element_set_file(filePath, command.numObject);
 
 	m_numSegments = command.numLineSegments;
@@ -160,9 +168,9 @@ void RSOManager::initialize_RSO_manager(const PredictionCommand& command)
 void RSOManager::load_two_line_element_set_file(const string& filePath, const int& numObjects)
 {
 	ifstream fin;
-	fin.open(filePath.c_str());
-	string delimiter = " ";
+	fin.open(filePath);
 
+	string delimiter = " \t";
 	int targetNumRSOs = numObjects;
 	if (numObjects == 0)
 		targetNumRSOs = INT_MAX;
@@ -795,8 +803,11 @@ double RSOManager::calculate_circle_of_OOI_radius()
 
 void RSOManager::load_PPDB(const string& filePath)
 {
-	ifstream fin;
+	std::ifstream fin;
 	fin.open(filePath);
+	//fin.open("D:\\LAB\\source\\repos\\vdrc\\COOPViewer\\COOPViewer\\result\\PPDB.txt");
+	
+	
 
 	int ID = 0;
 
@@ -830,7 +841,7 @@ void RSOManager::load_PPDB(const string& filePath)
 
 void RSOManager::load_TPDB(const string& filePath)
 {
-	ifstream fin;
+	std::ifstream fin;
 	fin.open(filePath);
 
 	int ID = 0;
@@ -913,4 +924,20 @@ string RSOManager::make_time_string(const double& givenMoment)
 
 	string timeStr = monthStr += string(" ") += to_string(timeInTM.tm_mday) += string(", ") += to_string(timeInTM.tm_year) += string(" ") += to_string(timeInTM.tm_hour) += string(":") += to_string(timeInTM.tm_min) += string(":") += to_string(timeInTM.tm_sec);
 	return timeStr;
+}
+
+
+string RSOManager::translate_to_window_path(const QString& QfilePath)
+{
+	string filePath = QfilePath.toLocal8Bit();
+
+	size_t i = filePath.find('/');
+	while (i != string::npos)
+	{
+		string part1 = filePath.substr(0, i);
+		string part2 = filePath.substr(i + 1);
+		filePath = part1 + R"(\)" + part2; // Use "\\\\" instead of R"(\\)" if your compiler doesn't support C++11's raw string literals
+		i = filePath.find('/', i + 1);
+	}
+	return filePath;
 }

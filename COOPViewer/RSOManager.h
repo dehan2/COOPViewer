@@ -1,12 +1,13 @@
 #pragma once
 
 #include "MinimalRSO.h"
-#include "constForCOOP.h"
 
+#include <QString>
 #include <list>
 #include <string>
 #include <array>
 #include "cJulian.h"
+#include "constForCOOP.h"
 
 using namespace std;
 
@@ -35,7 +36,7 @@ private:
 	list<TCAReport> m_PPDBInfos;
 	list<TPDBReport> m_TPDBInfos;
 
-
+	string m_cwd;
 public:
 	RSOManager() = default;
 	~RSOManager() {	clear();}
@@ -92,5 +93,8 @@ public:
 	void load_TPDB(const string& filePath);
 
 	string make_time_string(const double& givenMoment);
+
+	string translate_to_window_path(const QString& QfilePath);
 };
+
 

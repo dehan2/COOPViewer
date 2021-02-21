@@ -79,6 +79,17 @@ void COOPViewerWidget::draw_SPDB()
 		std::list<rg_Point3D> shortestLinkCoord;
 
 
+		if (pStarlinkManager != nullptr && pStarlinkManager->get_RSOs().empty() == false)
+		{
+			for (auto& rso : pStarlinkManager->get_RSOs())
+			{
+				rg_Point3D& coord = rso.get_coord();
+				draw_point(coord / 100, 5, GREEN);
+				draw_point(coord / 100, 8, RED);
+			}
+		}
+
+
 		for (auto& RSOID : momentNShortestLinkRSOsID)
 		{
 			MinimalRSO* currRSO = pManager->find_RSO_from_ID(RSOID);
@@ -169,8 +180,12 @@ void COOPViewerWidget::draw_line_among_OOIs()
 void COOPViewerWidget::change_view_to_OOI_direction()
 {
 	rg_Point3D center;
-
+	
+	if (pManager == nullptr)
+		return;
 	list<MinimalRSO*> OOIs = pManager->find_object_of_interests();
+	if (OOIs.empty())
+		return;
 
 	MinimalRSO* lastOOI = nullptr;
 	for (auto& OOI : OOIs)
@@ -181,4 +196,5 @@ void COOPViewerWidget::change_view_to_OOI_direction()
 	center = center / OOIs.size();
 	center.normalize();
 	set_eye_direction(center);
+	
 }

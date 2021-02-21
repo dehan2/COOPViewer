@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1115</width>
-    <height>797</height>
+    <width>1131</width>
+    <height>924</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -59,32 +59,37 @@
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_2">
              <item>
+              <spacer name="horizontalSpacer">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
               <widget class="QPushButton" name="pushButton_load_prediction_command">
                <property name="text">
-                <string>1.Prediction Command</string>
+                <string>1. Load Results</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="pushButton_load_PPDB">
-               <property name="text">
-                <string>2.PPDB</string>
+              <spacer name="horizontalSpacer_2">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
                </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="pushButton_load_TPDB">
-               <property name="text">
-                <string>3.TPDB</string>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
                </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="pushButton_load_SPDB">
-               <property name="text">
-                <string>4.SPDB</string>
-               </property>
-              </widget>
+              </spacer>
              </item>
             </layout>
            </widget>
@@ -348,11 +353,82 @@
            </spacer>
           </item>
           <item>
+           <widget class="QGroupBox" name="ooiBox">
+            <property name="title">
+             <string>Object of Interest</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_3">
+             <item>
+              <widget class="QGroupBox" name="groupBox_5">
+               <property name="title">
+                <string>Q1.</string>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_2">
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_3">
+                  <property name="text">
+                   <string>Catalog ID</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLineEdit" name="q1_distance"/>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLineEdit" name="q1_id"/>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QPushButton" name="pushButton">
+                  <property name="text">
+                   <string>Submit</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="label_5">
+                  <property name="text">
+                   <string>Cut Off Distance (km)</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="groupBox_6">
+               <property name="title">
+                <string>Q2.</string>
+               </property>
+               <layout class="QGridLayout" name="gridLayout">
+                <item row="1" column="0">
+                 <widget class="QLineEdit" name="q2_distance"/>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QPushButton" name="pushButton_2">
+                  <property name="text">
+                   <string>Submit</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_4">
+                  <property name="text">
+                   <string>Cut Off Distance (km)</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
            <widget class="QLabel" name="label_printStatus">
             <property name="minimumSize">
              <size>
               <width>0</width>
-              <height>100</height>
+              <height>10</height>
              </size>
             </property>
             <property name="text">
@@ -362,6 +438,26 @@
              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
             </property>
            </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_summary">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
           </item>
           <item>
            <spacer name="verticalSpacer">
@@ -415,8 +511,11 @@
        <attribute name="title">
         <string>PPDB &amp; TPDB Data</string>
        </attribute>
-       <layout class="QHBoxLayout" name="horizontalLayout_8">
-        <item>
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="1" column="2">
+         <widget class="QTableView" name="tableView_TPDBData"/>
+        </item>
+        <item row="1" column="1">
          <widget class="QTableView" name="tableView_PPDBData">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -429,8 +528,19 @@
           </attribute>
          </widget>
         </item>
-        <item>
-         <widget class="QTableView" name="tableView_TPDBData"/>
+        <item row="0" column="1">
+         <widget class="QLabel" name="label_6">
+          <property name="text">
+           <string>PPDB</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QLabel" name="label_7">
+          <property name="text">
+           <string>TPDB</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -448,7 +558,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1115</width>
+     <width>1131</width>
      <height>21</height>
     </rect>
    </property>
@@ -482,7 +592,7 @@
    <slot>load_prediction_command()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>838</x>
+     <x>972</x>
      <y>117</y>
     </hint>
     <hint type="destinationlabel">
@@ -514,7 +624,7 @@
    <slot>time_step_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>968</x>
+     <x>984</x>
      <y>238</y>
     </hint>
     <hint type="destinationlabel">
@@ -530,7 +640,7 @@
    <slot>time_step_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1024</x>
+     <x>1040</x>
      <y>238</y>
     </hint>
     <hint type="destinationlabel">
@@ -546,7 +656,7 @@
    <slot>time_step_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1080</x>
+     <x>1096</x>
      <y>238</y>
     </hint>
     <hint type="destinationlabel">
@@ -594,7 +704,7 @@
    <slot>go_to_start_moment()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>766</x>
+     <x>810</x>
      <y>210</y>
     </hint>
     <hint type="destinationlabel">
@@ -620,46 +730,14 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton_load_PPDB</sender>
-   <signal>clicked()</signal>
-   <receiver>COOPViewerClass</receiver>
-   <slot>load_PPDB_file()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>915</x>
-     <y>103</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1101</x>
-     <y>107</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pushButton_load_SPDB</sender>
-   <signal>clicked()</signal>
-   <receiver>COOPViewerClass</receiver>
-   <slot>load_shortest_link()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>1081</x>
-     <y>117</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1112</x>
-     <y>425</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>radioButton_selectPPDB</sender>
    <signal>clicked()</signal>
    <receiver>COOPViewerClass</receiver>
    <slot>mode_selection_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>771</x>
-     <y>283</y>
+     <x>806</x>
+     <y>293</y>
     </hint>
     <hint type="destinationlabel">
      <x>1111</x>
@@ -674,8 +752,8 @@
    <slot>mode_selection_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>819</x>
-     <y>284</y>
+     <x>867</x>
+     <y>293</y>
     </hint>
     <hint type="destinationlabel">
      <x>1115</x>
@@ -690,8 +768,8 @@
    <slot>mode_selection_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>925</x>
-     <y>289</y>
+     <x>971</x>
+     <y>293</y>
     </hint>
     <hint type="destinationlabel">
      <x>1107</x>
@@ -706,7 +784,7 @@
    <slot>mode_selection_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>989</x>
+     <x>1097</x>
      <y>293</y>
     </hint>
     <hint type="destinationlabel">
@@ -723,7 +801,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>553</x>
-     <y>631</y>
+     <y>834</y>
     </hint>
     <hint type="destinationlabel">
      <x>1108</x>
@@ -738,8 +816,8 @@
    <slot>update_TPDB_selection_in_table(QModelIndex)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>859</x>
-     <y>644</y>
+     <x>1092</x>
+     <y>834</y>
     </hint>
     <hint type="destinationlabel">
      <x>1112</x>
@@ -748,18 +826,66 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton_load_TPDB</sender>
+   <sender>pushButton</sender>
    <signal>clicked()</signal>
    <receiver>COOPViewerClass</receiver>
-   <slot>load_TPDB_file()</slot>
+   <slot>objectOfInterest_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>976</x>
-     <y>103</y>
+     <x>1087</x>
+     <y>454</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1115</x>
-     <y>81</y>
+     <x>1108</x>
+     <y>563</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>COOPViewerClass</receiver>
+   <slot>objectOfInterest_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1087</x>
+     <y>533</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1028</x>
+     <y>715</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>COOPViewerClass</receiver>
+   <slot>update_PPDB_n_TPDB_table_Q1()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1055</x>
+     <y>446</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1124</x>
+     <y>450</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>COOPViewerClass</receiver>
+   <slot>update_PPDB_n_TPDB_table_Q2()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1062</x>
+     <y>528</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1128</x>
+     <y>531</y>
     </hint>
    </hints>
   </connection>
@@ -781,5 +907,7 @@
   <slot>mode_selection_changed()</slot>
   <slot>update_TPDB_selection_in_table(QModelIndex)</slot>
   <slot>load_TPDB_file()</slot>
+  <slot>update_PPDB_n_TPDB_table_Q1()</slot>
+  <slot>update_PPDB_n_TPDB_table_Q2()</slot>
  </slots>
 </ui>

@@ -1,17 +1,18 @@
 #include "COOPViewer.h"
-
+#include <direct.h>
 #include <fstream>
 #include "cJulian.h"
 #include <QDate>
 #include <QTime>
 #include <QTableView>
 #include <sstream>
-
+#include <time.h>
+#include <sstream>
 COOPViewer::COOPViewer(QWidget* parent)
 	: QMainWindow(parent), m_simulationTimer(this)
 {
     ui.setupUi(this);
-
+	ui.ooiBox->hide();
 
 
 	add_PPDB_table_header();
@@ -73,6 +74,7 @@ double COOPViewer::change_time_to_given_moment(const double& givenMoment)
 	update_time_info();
 
 	m_manager.update_RSO_statuses_to_given_moment(m_currentTime);
+	
 	ui.openglWidget->update();
 
 	return m_currentTime;
@@ -82,11 +84,16 @@ double COOPViewer::change_time_to_given_moment(const double& givenMoment)
 
 double COOPViewer::change_time_by_given_increment(const double& givenIncrement)
 {
+	
 	m_currentTime = check_validity_of_given_time(m_currentTime+givenIncrement);
+
+	if (m_mode == COOP_OPERATION_MODE::SPDB && m_currentTime >= 3600)
+		m_currentTime = 3600;
 
 	update_time_info();
 
 	m_manager.update_RSO_statuses_to_given_moment(m_currentTime);
+	m_starlinkManager.update_RSO_statuses_to_given_moment(m_currentTime);
 	ui.openglWidget->update();
 
 	return m_currentTime;
@@ -136,6 +143,7 @@ void COOPViewer::update_status_message_for_PPDB()
 		string msgForPPDB = generate_status_message_for_PPDB();
 		ui.label_printStatus->setText(QString::fromStdString(msgForPPDB));
 	}
+	ui.ooiBox->show();
 }
 
 
@@ -147,6 +155,7 @@ void COOPViewer::update_status_message_for_TPDB()
 		string msgForTPDB = generate_status_message_for_TPDB();
 		ui.label_printStatus->setText(QString::fromStdString(msgForTPDB));
 	}
+	ui.ooiBox->show();
 }
 
 
@@ -158,6 +167,7 @@ void COOPViewer::update_status_message_for_SPDB()
 		string msgForSPDB = generate_status_message_for_SPDB();
 		ui.label_printStatus->setText(QString::fromStdString(msgForSPDB));
 	}
+	ui.ooiBox->hide();
 }
 
 
@@ -198,14 +208,28 @@ void COOPViewer::update_PPDB_table()
 {
 	int currRow = 0;
 	m_mapFromPPDBRowToTCAReport.clear();
+	m_PPDBModel.clear();
+	
+	add_PPDB_table_header();
+	ui.tableView_PPDBData->setModel(&m_PPDBModel);
+	ui.tableView_PPDBData->setEditTriggers(QAbstractItemView::NoEditTriggers);
+	adjust_PPDB_column_width();
 
 	for (auto& entity : m_manager.get_PPDB_infos())
 	{
+		if (m_queryIndex == 1 &&
+			(entity.primaryID != ui.q1_id->text().toInt() && entity.secondaryID != ui.q1_id->text().toInt()))
+			continue;
+		if (m_queryIndex == 1 && entity.distanceOfClosestApproach > ui.q1_distance->text().toDouble())
+			continue;
+		if (m_queryIndex == 2 && entity.distanceOfClosestApproach > ui.q2_distance->text().toDouble())
+			continue;
 		QStandardItem* currItem = new QStandardItem(1, NUM_COL_PPDB);
 		m_PPDBModel.insertRow(currRow, currItem);
 
 		QModelIndex primaryIndex = m_PPDBModel.index(currRow, COL_PPDB_PRIMARY);
 		QModelIndex secondaryIndex = m_PPDBModel.index(currRow, COL_PPDB_SECONDARY);
+		
 		QModelIndex DCAIndex = m_PPDBModel.index(currRow, COL_PPDB_DCA);
 		QModelIndex TCAIndex = m_PPDBModel.index(currRow, COL_PPDB_TCA);
 		QModelIndex CAStartIndex = m_PPDBModel.index(currRow, COL_PPDB_CASTART);
@@ -227,8 +251,66 @@ void COOPViewer::update_PPDB_table()
 		currRow++;
 	}
 
-	//ui.tableView_PPDBData->resizeColumnsToContents();
+
 	//ui.tableView_PPDBData->resizeRowsToContents();
+}
+
+void COOPViewer::update_PPDB_n_TPDB_table_Q1()
+{
+	clock_t start, end; 
+	double result; 
+	start = clock(); 
+	// 수행 시간 측정 시작 /* 수행시간 측정하고자 하는 코드 */ 
+
+	m_queryIndex = 1;
+	update_PPDB_table();
+	update_TPDB_table();
+
+	end = clock(); //시간 측정 끝 
+	result = (double)(end - start); // 결과 출력 
+	result = ((result) / CLOCKS_PER_SEC);
+	int n_RSOs = m_manager.get_RSOs().size();
+	string summary = "#RSOs: ";
+	summary += to_string(n_RSOs);
+	summary += "\n";
+	summary += "Query elapsed time: ";
+
+	std::ostringstream out;
+	out.precision(3);
+	out << std::fixed << result;
+
+	summary += out.str();
+	summary += "sec";
+	ui.label_summary->setText(QString::fromStdString(summary));
+}
+
+void COOPViewer::update_PPDB_n_TPDB_table_Q2()
+{
+	clock_t start, end;
+	double result;
+	start = clock();
+	// 수행 시간 측정 시작 /* 수행시간 측정하고자 하는 코드 */ 
+
+	m_queryIndex = 2;
+	update_PPDB_table();
+	update_TPDB_table();
+
+	end = clock(); //시간 측정 끝 
+	result = (double)(end - start); // 결과 출력 
+	result = ((result) / CLOCKS_PER_SEC);
+	int n_RSOs = m_manager.get_RSOs().size();
+	string summary = "#RSOs: ";
+	summary += to_string(n_RSOs);
+	summary += "\n";
+	summary += "Query elapsed time: ";
+
+	std::ostringstream out;
+	out.precision(3);
+	out << std::fixed << result;
+
+	summary += out.str();
+	summary += "sec";
+	ui.label_summary->setText(QString::fromStdString(summary));
 }
 
 
@@ -261,8 +343,27 @@ void COOPViewer::update_TPDB_table()
 	int currRow = 0;
 	m_mapFromTPDBRowToReport.clear();
 
+	m_TPDBModel.clear();
+
+	add_TPDB_table_header();
+	ui.tableView_TPDBData->setModel(&m_TPDBModel);
+	ui.tableView_TPDBData->setEditTriggers(QAbstractItemView::NoEditTriggers);
+	adjust_TPDB_column_width();
+
+
+
+
 	for (auto& entity : m_manager.get_TPDB_infos())
 	{
+		if (m_queryIndex == 1 &&
+			(entity.primaryID != ui.q1_id->text().toInt() && entity.secondaryID != ui.q1_id->text().toInt() && entity.tertiaryID != ui.q1_id->text().toInt()))
+			continue;
+		if (m_queryIndex == 1 && entity.minRadius > ui.q1_distance->text().toDouble())
+			continue;
+		if (m_queryIndex == 2 && entity.minRadius > ui.q2_distance->text().toDouble())
+			continue;
+
+
 		QStandardItem* currItem = new QStandardItem(1, 5);
 		m_TPDBModel.insertRow(currRow, currItem);
 
@@ -392,7 +493,7 @@ void COOPViewer::change_mode_selection()
 
 void COOPViewer::load_prediction_command()
 {
-	QString QfilePath = QFileDialog::getOpenFileName(this, tr("Open Prediction Command File"), NULL, tr("Prediction Command file (*.txt)"));
+	QString QfilePath = QFileDialog::getOpenFileName(this, tr("Open Prediction Command File"), NULL, tr("Prediction Command file (*.coop)"));
 	string filePath = translate_to_window_path(QfilePath);
 
 	m_manager.read_prediction_command_file(filePath);
@@ -400,6 +501,21 @@ void COOPViewer::load_prediction_command()
 	ui.openglWidget->set_mode(&m_mode);
 	ui.openglWidget->update();
 	
+	char cwd[1024];
+	_getcwd(cwd, sizeof(cwd));
+	string s_cwd(cwd);
+	m_manager.load_PPDB(s_cwd + string("\\result\\PPDB.txt"));
+	update_PPDB_table();
+	m_manager.load_TPDB(s_cwd + string("\\result\\TPDB.txt"));
+	update_TPDB_table();
+	
+
+	m_starlinkManager.read_prediction_command_file(s_cwd + string("\\result\\starlink_PredictionCommand.txt"));
+	ui.openglWidget->pStarlinkManager = &m_starlinkManager;
+	m_orbitShorestLink.load_orbit_shortest_link(s_cwd + string("\\result\\SPDB.txt"));
+	
+	ui.openglWidget->set_shortest_links(&m_orbitShorestLink);
+
 	update_time_info();
 	update();
 }
@@ -578,13 +694,13 @@ void COOPViewer::mode_selection_changed()
 
 	}
 
-	if (ui.radioButton_selectSPDB->isChecked())
+	else if (ui.radioButton_selectSPDB->isChecked())
 	{
 		m_mode = COOP_OPERATION_MODE::SPDB;
 
 	}
 
-	if (ui.radioButton_selectSafetyEval->isChecked())
+	else if (ui.radioButton_selectSafetyEval->isChecked())
 	{
 		m_mode = COOP_OPERATION_MODE::EVAL_SAFETY;
 

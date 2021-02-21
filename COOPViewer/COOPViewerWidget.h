@@ -23,6 +23,7 @@ private:
 	COOP_OPERATION_MODE* pMode = nullptr;
 
 public:
+	RSOManager* pStarlinkManager = nullptr;
 	explicit COOPViewerWidget(QWidget* parent = 0);
 	virtual ~COOPViewerWidget();
 
