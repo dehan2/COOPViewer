@@ -777,26 +777,69 @@ double RSOManager::calculate_OOI_distance()
 
 
 
-double RSOManager::calculate_circle_of_OOI_radius()
+Circle3D RSOManager::calculate_circle_of_OOIs()
 {
 	//Note : NEED TO BE UPDATED - 210220
+
+	Circle3D cotangentCircle;
 
 	if (m_objectOfInterestIDs.size() == 3)
 	{
 		list<MinimalRSO*> OOIs = find_object_of_interests();
 
-		MinimalRSO* primary = OOIs.front();
-		MinimalRSO* secondary = OOIs.back();
+		array<rg_Point3D, 3> coords;
+		
+		int index = 0;
+		for (auto& OOI : OOIs)
+		{
+			coords.at(index++) = OOI->get_coord();
+		}
 
-		double distance = 0;
-
-		if (primary != nullptr && secondary != nullptr)
-			distance = primary->get_coord().distance(secondary->get_coord());
-
-		return distance;
+		cotangentCircle = evaluate_cotangent_circle(coords);
 	}
-	else
-		return 0;
+
+	return cotangentCircle;
+}
+
+
+
+Circle3D RSOManager::evaluate_cotangent_circle(const array<rg_Point3D, 3>& inputPts) const
+{
+	rg_Point3D vec1 = inputPts.at(0) - inputPts.at(1);
+	rg_Point3D vec2 = inputPts.at(2) - inputPts.at(1);
+
+
+	//////////////////////////////////////////////////////////////////////////
+	//Cotangent circle solution from https://stackoverflow.com/questions/13977354/build-circle-from-3-points-in-3d-space-implementation-in-c-or-c
+	//////////////////////////////////////////////////////////////////////////
+
+	// triangle "edges"
+	const rg_Point3D t = inputPts.at(1) - inputPts.at(0);
+	const rg_Point3D u = inputPts.at(2) - inputPts.at(0);
+	const rg_Point3D v = inputPts.at(2) - inputPts.at(1);
+
+	// triangle normal
+	const rg_Point3D w = t.crossProduct(u);
+	const double wsl = w.squaredMagnitude();//w.getSqrLength();
+
+	if (wsl < 10e-14)
+	{
+		cout << "Error: too small wsl: " << wsl << endl;
+		//return false; // area of the triangle is too small (you may additionally check the points for colinearity if you are paranoid)
+	}
+
+	// helpers
+	const double iwsl2 = 1.0 / (2.0 * wsl);
+	const double tt = t.squaredMagnitude();
+	const double uu = u.squaredMagnitude();
+
+	// result circle
+	rg_Point3D circleCenter_3D = inputPts.at(0) + (u * tt * (u * v) - t * uu * (t * v)) * iwsl2;
+	double   radius = sqrt(tt * uu * (v.squaredMagnitude()) * iwsl2 * 0.5);
+	rg_Point3D zVec = (inputPts.at(0) - circleCenter_3D).crossProduct(inputPts.at(2) - circleCenter_3D).getUnitVector();
+
+	Circle3D cotangentCircle(circleCenter_3D, radius, zVec);
+	return cotangentCircle;
 }
 
 

@@ -59,6 +59,7 @@ public:
 
 	void set_current_time(const double& time);
 	void draw_line_among_OOIs();
+	void draw_circle_among_OOIs();
 	void change_view_to_OOI_direction();
 
 };

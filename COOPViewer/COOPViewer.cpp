@@ -459,11 +459,11 @@ string COOPViewer::generate_status_message_for_TPDB()
 	stringstream message;
 
 	const list<int>* OOIs = m_manager.get_objectOfInterestIDs();
-	double radius = m_manager.calculate_circle_of_OOI_radius();
+	Circle3D circle = m_manager.calculate_circle_of_OOIs();
 
 	auto it = OOIs->begin();
 
-	message << "Primary: " << (*it++) << ", Secondary: " << (*it++) << ", Tertiary: "<< (*it++)<<", radius: " << radius<<"km\n";
+	message << "Primary: " << (*it++) << ", Secondary: " << (*it++) << ", Tertiary: "<< (*it++)<<", radius: " << circle .getRadius()<<"km\n";
 
 	return message.str();
 }

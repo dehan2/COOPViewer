@@ -7,6 +7,7 @@
 #include <string>
 #include <array>
 #include "cJulian.h"
+#include "Circle3D.h"
 #include "constForCOOP.h"
 
 using namespace std;
@@ -87,8 +88,9 @@ public:
 
 	list<MinimalRSO*> find_object_of_interests();
 	double calculate_OOI_distance();
-	double calculate_circle_of_OOI_radius();
-	
+	Circle3D calculate_circle_of_OOIs();
+	Circle3D evaluate_cotangent_circle(const array<rg_Point3D, 3>& inputPts) const;
+
 	void load_PPDB(const string& filePath);
 	void load_TPDB(const string& filePath);
 

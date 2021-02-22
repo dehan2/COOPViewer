@@ -66,7 +66,7 @@ void COOPViewerWidget::draw_PPDB()
 void COOPViewerWidget::draw_TPDB()
 {
 	if (pManager->get_objectOfInterestIDs()->empty() == false)
-		draw_line_among_OOIs();
+		draw_circle_among_OOIs();
 }
 
 
@@ -209,6 +209,24 @@ void COOPViewerWidget::draw_line_among_OOIs()
 		}
 
 		lastOOI = OOI;
+	}
+}
+
+
+
+void COOPViewerWidget::draw_circle_among_OOIs()
+{
+	if (pManager->get_objectOfInterestIDs()->size() == 3)
+	{
+		list<MinimalRSO*> OOIs = pManager->find_object_of_interests();
+
+		for (auto& OOI : OOIs)
+		{
+			draw_sphere(OOI->get_coord() / 100, 1, YELLOW);
+		}
+
+		Circle3D cotangentCircle = pManager->calculate_circle_of_OOIs();
+		draw_circle(cotangentCircle.getCenter() / 100, cotangentCircle.getRadius() / 100, cotangentCircle.getNormal(), 5, RED);
 	}
 }
 
