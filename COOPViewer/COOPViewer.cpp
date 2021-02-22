@@ -13,6 +13,7 @@ COOPViewer::COOPViewer(QWidget* parent)
 {
     ui.setupUi(this);
 	ui.ooiBox->hide();
+	ui.q4Box->hide();
 
 
 	add_PPDB_table_header();
@@ -146,6 +147,7 @@ void COOPViewer::update_status_message_for_PPDB()
 		ui.label_printStatus->setText(QString::fromStdString(msgForPPDB));
 	}
 	ui.ooiBox->show();
+	ui.q4Box->hide();
 }
 
 
@@ -160,6 +162,7 @@ void COOPViewer::update_status_message_for_TPDB()
 		ui.label_printStatus->setText(QString::fromStdString(msgForTPDB));
 	}
 	ui.ooiBox->show();
+	ui.q4Box->hide();
 }
 
 
@@ -189,6 +192,7 @@ void COOPViewer::update_status_message_for_SPDB()
 
 
 	ui.ooiBox->hide();
+	ui.q4Box->hide();
 }
 
 
@@ -203,6 +207,7 @@ void COOPViewer::update_status_message_for_eval_safety()
 		ui.label_printStatus->setText(QString::fromStdString(msgForSPDB));
 	}
 	ui.ooiBox->hide();
+	ui.q4Box->show();
 }
 
 
@@ -470,7 +475,7 @@ string COOPViewer::generate_status_message_for_SPDB()
 	stringstream message;
 
 	auto imminentShortestPath = m_orbitShorestLink.find_shortest_path_imminent_to_moment(m_currentTime);
-	message << "Path length: " << imminentShortestPath->pathLength<<"\n"
+	message << "Path length: " << imminentShortestPath->pathLength << " (km)"<<"\n"
 			<< "Start (red ball): SEOUL - Hanyang University" << "\n"
 			<< "End (pink ball): San Francisco - Google" << "\n";
 
@@ -553,10 +558,17 @@ void COOPViewer::load_prediction_command()
 	ui.openglWidget->set_shortest_links(&m_orbitShorestLink);
 
 
-	m_orbitTunnel.load_orbit_tunnel2(s_cwd + string("\\result\\SEDB.txt"));
-	ui.openglWidget->set_orbit_tunnel(&m_orbitTunnel);
+	m_orbitTunnel_B.load_orbit_tunnel2(s_cwd + string("\\result\\SEDB_B.txt"));
+	ui.openglWidget->set_orbit_tunnel_B(&m_orbitTunnel_B);
 	ui.openglWidget->update();
 
+	m_orbitTunnel_C.load_orbit_tunnel2(s_cwd + string("\\result\\SEDB_C.txt"));
+	ui.openglWidget->set_orbit_tunnel_C(&m_orbitTunnel_C);
+	ui.openglWidget->update();
+	
+	m_orbitTunnel_N.load_orbit_tunnel2(s_cwd + string("\\result\\SEDB_N.txt"));
+	ui.openglWidget->set_orbit_tunnel_N(&m_orbitTunnel_N);
+	ui.openglWidget->update();
 
 	update_time_info();
 	update();
@@ -637,8 +649,8 @@ void COOPViewer::load_orbit_tunnel()
 
 	//m_orbitTunnel.load_orbit_tunnel(filePath);
 
-	m_orbitTunnel.load_orbit_tunnel2(filePath);
-	ui.openglWidget->set_orbit_tunnel(&m_orbitTunnel);
+	//m_orbitTunnel.load_orbit_tunnel2(filePath);
+	//ui.openglWidget->set_orbit_tunnel(&m_orbitTunnel);
 	ui.openglWidget->update();
 
 	update_time_info();
@@ -750,5 +762,23 @@ void COOPViewer::mode_selection_changed()
 
 	update_status_message();
 	ui.openglWidget->change_view_to_OOI_direction();
+	ui.openglWidget->update();
+}
+
+
+void COOPViewer::space_center_selection_changed_Q4()
+{
+	if (ui.q4_n->isChecked())
+	{
+		ui.openglWidget->m_spaceCenterCode = 1;
+	}
+	else if (ui.q4_b->isChecked())
+	{
+		ui.openglWidget->m_spaceCenterCode = 2;
+	}
+	else if (ui.q4_c->isChecked())
+	{
+		ui.openglWidget->m_spaceCenterCode = 3;
+	}
 	ui.openglWidget->update();
 }

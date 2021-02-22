@@ -118,6 +118,17 @@ void COOPViewerWidget::draw_SPDB()
 
 void COOPViewerWidget::draw_eval_safety()
 {
+	OrbitTunnel* pOrbitTunnel;
+	if (m_spaceCenterCode == 1)
+		pOrbitTunnel = pOrbitTunnel_N;
+	else if (m_spaceCenterCode == 2)
+		pOrbitTunnel = pOrbitTunnel_B;
+	else if (m_spaceCenterCode == 3)
+		pOrbitTunnel = pOrbitTunnel_C;
+	else
+		pOrbitTunnel = pOrbitTunnel_N;
+
+
 	if (pOrbitTunnel != nullptr)
 	{
 		//draw_sphere(rg_Point3D(0, 0, 64), 1, RED);

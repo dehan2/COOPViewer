@@ -24,7 +24,11 @@ public:
     RSOManager m_manager;
     RSOManager m_starlinkManager;
     OrbitShortestLink m_orbitShorestLink;
-    OrbitTunnel m_orbitTunnel;
+    
+    
+    OrbitTunnel m_orbitTunnel_B;
+    OrbitTunnel m_orbitTunnel_C;
+    OrbitTunnel m_orbitTunnel_N;
 
     double m_currentTime = 0;
 
@@ -107,6 +111,8 @@ public slots:
 	void update_TPDB_selection_in_table(QModelIndex selectedRow);
 
     void mode_selection_changed();
+
+    void space_center_selection_changed_Q4();
 
     void update_PPDB_n_TPDB_table_Q1();
     void update_PPDB_n_TPDB_table_Q2();

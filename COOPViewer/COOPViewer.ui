@@ -424,6 +424,39 @@
            </widget>
           </item>
           <item>
+           <widget class="QGroupBox" name="q4Box">
+            <property name="title">
+             <string>Q4. [Select Space Center]</string>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_7">
+             <item>
+              <widget class="QRadioButton" name="q4_n">
+               <property name="text">
+                <string>나로 우주센터</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="q4_b">
+               <property name="text">
+                <string>Boca Chica</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QRadioButton" name="q4_c">
+               <property name="text">
+                <string>Cape Canaveral</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
            <widget class="QLabel" name="label_printStatus">
             <property name="minimumSize">
              <size>
@@ -889,6 +922,54 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>q4_n</sender>
+   <signal>clicked()</signal>
+   <receiver>COOPViewerClass</receiver>
+   <slot>space_center_selection_changed_Q4()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>787</x>
+     <y>587</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1129</x>
+     <y>654</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>q4_b</sender>
+   <signal>clicked()</signal>
+   <receiver>COOPViewerClass</receiver>
+   <slot>space_center_selection_changed_Q4()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>926</x>
+     <y>587</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1129</x>
+     <y>710</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>q4_c</sender>
+   <signal>clicked()</signal>
+   <receiver>COOPViewerClass</receiver>
+   <slot>space_center_selection_changed_Q4()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1019</x>
+     <y>590</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1123</x>
+     <y>696</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>load_prediction_command()</slot>
@@ -909,5 +990,6 @@
   <slot>load_TPDB_file()</slot>
   <slot>update_PPDB_n_TPDB_table_Q1()</slot>
   <slot>update_PPDB_n_TPDB_table_Q2()</slot>
+  <slot>space_center_selection_changed_Q4()</slot>
  </slots>
 </ui>
