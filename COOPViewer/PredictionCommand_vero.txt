@@ -1,2 +1,0 @@
-# Directory TLEFile NumObjects NumLineSeg TimeWindow EpochYear Mon Day Hour Min Sec 
-.\ LEO_Nov9_2020_1630UCT_4137.tle 4137 1000 1.0e-3 86400 2020 11 11 0 0 0 

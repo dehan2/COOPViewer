@@ -138,6 +138,8 @@ void COOPViewer::update_status_message()
 
 void COOPViewer::update_status_message_for_PPDB()
 {
+	ui.label_printStatus->clear();
+	ui.label_summary->clear();
 	if (m_manager.get_objectOfInterestIDs()->size() == 2)
 	{
 		string msgForPPDB = generate_status_message_for_PPDB();
@@ -150,6 +152,8 @@ void COOPViewer::update_status_message_for_PPDB()
 
 void COOPViewer::update_status_message_for_TPDB()
 {
+	ui.label_printStatus->clear();
+	ui.label_summary->clear();
 	if (m_manager.get_objectOfInterestIDs()->size() == 3)
 	{
 		string msgForTPDB = generate_status_message_for_TPDB();
@@ -162,11 +166,28 @@ void COOPViewer::update_status_message_for_TPDB()
 
 void COOPViewer::update_status_message_for_SPDB()
 {
+	ui.label_printStatus->clear();
+	ui.label_summary->clear();
 	if (!m_orbitShorestLink.get_shortest_paths().empty())
 	{
 		string msgForSPDB = generate_status_message_for_SPDB();
 		ui.label_printStatus->setText(QString::fromStdString(msgForSPDB));
 	}
+
+	/////
+	int n_RSOs = m_starlinkManager.get_RSOs().size();
+	string summary = "#STARLINKs: ";
+	summary += to_string(n_RSOs);
+	summary += "\n";
+	
+	/*summary += "Query elapsed time: ";
+	summary += "Done with Web Server in real time";*/
+	
+	ui.label_summary->setText(QString::fromStdString(summary));
+	/////
+
+
+
 	ui.ooiBox->hide();
 }
 
@@ -174,7 +195,14 @@ void COOPViewer::update_status_message_for_SPDB()
 
 void COOPViewer::update_status_message_for_eval_safety()
 {
-
+	ui.label_printStatus->clear();
+	ui.label_summary->clear();
+	if (true)
+	{
+		string msgForSPDB = generate_status_message_for_eval_safety();
+		ui.label_printStatus->setText(QString::fromStdString(msgForSPDB));
+	}
+	ui.ooiBox->hide();
 }
 
 
@@ -442,7 +470,10 @@ string COOPViewer::generate_status_message_for_SPDB()
 	stringstream message;
 
 	auto imminentShortestPath = m_orbitShorestLink.find_shortest_path_imminent_to_moment(m_currentTime);
-	message << "Path length: " << imminentShortestPath->pathLength<<"\n";
+	message << "Path length: " << imminentShortestPath->pathLength<<"\n"
+			<< "Start (red ball): SEOUL - Hanyang University" << "\n"
+			<< "End (pink ball): San Francisco - Google" << "\n";
+
 
 	return message.str();
 }
@@ -451,6 +482,12 @@ string COOPViewer::generate_status_message_for_SPDB()
 
 string COOPViewer::generate_status_message_for_eval_safety()
 {
+
+
+	/// <summary>
+	/// SO WHAT
+	/// </summary>
+	/// <returns></returns>
 	return string();
 }
 
@@ -513,8 +550,13 @@ void COOPViewer::load_prediction_command()
 	m_starlinkManager.read_prediction_command_file(s_cwd + string("\\result\\starlink_PredictionCommand.txt"));
 	ui.openglWidget->pStarlinkManager = &m_starlinkManager;
 	m_orbitShorestLink.load_orbit_shortest_link(s_cwd + string("\\result\\SPDB.txt"));
-	
 	ui.openglWidget->set_shortest_links(&m_orbitShorestLink);
+
+
+	m_orbitTunnel.load_orbit_tunnel2(s_cwd + string("\\result\\SEDB.txt"));
+	ui.openglWidget->set_orbit_tunnel(&m_orbitTunnel);
+	ui.openglWidget->update();
+
 
 	update_time_info();
 	update();
@@ -593,9 +635,9 @@ void COOPViewer::load_orbit_tunnel()
 	QString QfilePath = QFileDialog::getOpenFileName(this, tr("Open Prediction Command File"), NULL, tr("Prediction Command file (*.txt)"));
 	string filePath = translate_to_window_path(QfilePath);
 
-	m_orbitTunnel.load_orbit_tunnel(filePath);
-	
-	
+	//m_orbitTunnel.load_orbit_tunnel(filePath);
+
+	m_orbitTunnel.load_orbit_tunnel2(filePath);
 	ui.openglWidget->set_orbit_tunnel(&m_orbitTunnel);
 	ui.openglWidget->update();
 
@@ -708,4 +750,5 @@ void COOPViewer::mode_selection_changed()
 
 	update_status_message();
 	ui.openglWidget->change_view_to_OOI_direction();
+	ui.openglWidget->update();
 }

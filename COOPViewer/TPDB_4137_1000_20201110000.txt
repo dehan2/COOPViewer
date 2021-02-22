@@ -1,8 +1,0 @@
-% Min Circle Under 10.000km:
-%
-% Time Elapsed: 863.241 sec
-%
-% PrimaryID	SecondaryID	TertiaryID	MinRadius(km)	Year	Mon	Day	Hour	Min	Sec
-%
-43714	43720	43740	9.884	0.000	2020	11	10	0	0	0.000
-43714	43720	43740	9.884	60.000	2020	11	10	0	1	0.000

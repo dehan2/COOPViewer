@@ -115,11 +115,12 @@ void COOPViewerWidget::draw_SPDB()
 
 
 
+
 void COOPViewerWidget::draw_eval_safety()
 {
 	if (pOrbitTunnel != nullptr)
 	{
-		draw_sphere(rg_Point3D(0, 0, 64), 1, RED);
+		//draw_sphere(rg_Point3D(0, 0, 64), 1, RED);
 		int index = 0;
 		for (const auto& orbit_tunnel : pOrbitTunnel->get_orbit_tunnels())
 		{
@@ -137,9 +138,34 @@ void COOPViewerWidget::draw_eval_safety()
 				MinimalRSO* currRSO = pManager->find_RSO_from_ID(RSOID);
 				draw_point(currRSO->get_coord() / 100, 9, RED);
 			}
-			++index;
-			if (index == 2)
-				break;
+
+			for (const auto& face : orbit_tunnel.boundaryFaces)
+			{
+				const list< list<rg_Point3D> >& vertices = face.boundary_vertices();
+				const list< rg_Point3D >& verticesOfOuterLoop = vertices.front();
+
+				list<rg_Point3D> verticesWithScaleDown;
+
+				rg_Point3D vtx[3];
+				int i_vec = 0;
+				for (const auto& vertex : verticesOfOuterLoop)
+				{
+					if (i_vec < 3)
+					{
+						verticesWithScaleDown.push_back(vertex / 100);
+						vtx[i_vec++] = vertex / 100;
+					}
+					else
+						verticesWithScaleDown.push_back(vertex / 100);
+				}
+
+				rg_Point3D vec[2];
+				vec[0] = (vtx[1] - vtx[0]);
+				vec[1] = (vtx[2] - vtx[1]);
+				rg_Point3D normal = vec[0].crossProduct(vec[1]);
+				draw_polygon(verticesWithScaleDown, normal.getUnitVector(), GREY, 0.5);
+				//draw_polygon2(verticesOfOuterLoop, normal.getUnitVector(), GREY);
+			}
 		}
 	}
 }
