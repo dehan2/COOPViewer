@@ -51,7 +51,7 @@
       <AdditionalIncludeDirectories>..\..\COOPLib\orbitTools\orbit;..\..\COOPLib\orbitTools\core;..\..\COOPLib\SGP4_06;$(VDIR)\src\V\VUFS\include;..\..\VDRCQtLib\VDRCQtLib;$(Qt_INCLUDEPATH_);.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>
       </AdditionalOptions>
-      <PreprocessorDefinitions>/NODEFAULTLIB:library;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -62,7 +62,7 @@
       <AdditionalIncludeDirectories>..\..\COOPLib\orbitTools\orbit;..\..\COOPLib\orbitTools\core;..\..\COOPLib\SGP4_06;$(VDIR)\src\V\VUFS\include;..\..\VDRCQtLib\VDRCQtLib;$(Qt_INCLUDEPATH_);.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>
       </AdditionalOptions>
-      <PreprocessorDefinitions>/NODEFAULTLIB:library;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>opengl32.lib;$(Qt_LIBS_);%(AdditionalDependencies)</AdditionalDependencies>
@@ -139,6 +139,9 @@
     </ProjectReference>
     <ProjectReference Include="..\..\dev_vdrc\VUFS\VUFS.vcxproj">
       <Project>{3913760f-393e-42c3-93f0-1cf973768670}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\VDRCQtLib\VDRCQtLib\VDRCQtLib.vcxproj">
+      <Project>{6b446e23-249c-4819-a228-8e55cc99ff7c}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
