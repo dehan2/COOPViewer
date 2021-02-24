@@ -1,0 +1,3 @@
+[submodule "COOPLib"]
+	path = COOPLib
+	url = https://github.com/dehan2/COOPLib.git
