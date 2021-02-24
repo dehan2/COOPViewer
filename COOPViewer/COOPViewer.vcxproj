@@ -59,7 +59,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\COOPLib\orbitTools\orbit;..\..\COOPLib\orbitTools\core;..\..\COOPLib\SGP4_06;$(VDIR)\src\V\VUFS\include;..\..\VDRCQtLib\VDRCQtLib;$(Qt_INCLUDEPATH_);.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\COOPLib\orbitTools\orbit;..\..\COOPLib\orbitTools\core;..\..\COOPLib\SGP4_06;$(VDIR)\src\V\VUFS\include;..\..\VDRCQtLib2\VDRCQtLib;$(Qt_INCLUDEPATH_);.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>
       </AdditionalOptions>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -69,12 +69,12 @@
     </Link>
   </ItemDefinitionGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
-    <QtInstall>msvc2019_64</QtInstall>
+    <QtInstall>msvc2017_64</QtInstall>
     <QtModules>core;gui;opengl;widgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
-    <QtInstall>msvc2019_64</QtInstall>
+    <QtInstall>msvc2017_64</QtInstall>
     <QtModules>core;gui;opengl;widgets</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
@@ -140,7 +140,7 @@
     <ProjectReference Include="..\..\dev_vdrc\VUFS\VUFS.vcxproj">
       <Project>{3913760f-393e-42c3-93f0-1cf973768670}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\..\VDRCQtLib\VDRCQtLib\VDRCQtLib.vcxproj">
+    <ProjectReference Include="..\..\VDRCQtLib2\VDRCQtLib\VDRCQtLib.vcxproj">
       <Project>{6b446e23-249c-4819-a228-8e55cc99ff7c}</Project>
     </ProjectReference>
   </ItemGroup>

@@ -140,7 +140,7 @@ void COOPViewer::update_status_message()
 void COOPViewer::update_status_message_for_PPDB()
 {
 	ui.label_printStatus->clear();
-	ui.label_summary->clear();
+	
 	if (m_manager.get_objectOfInterestIDs()->size() == 2)
 	{
 		string msgForPPDB = generate_status_message_for_PPDB();
@@ -155,7 +155,7 @@ void COOPViewer::update_status_message_for_PPDB()
 void COOPViewer::update_status_message_for_TPDB()
 {
 	ui.label_printStatus->clear();
-	ui.label_summary->clear();
+	
 	if (m_manager.get_objectOfInterestIDs()->size() == 3)
 	{
 		string msgForTPDB = generate_status_message_for_TPDB();
@@ -170,7 +170,7 @@ void COOPViewer::update_status_message_for_TPDB()
 void COOPViewer::update_status_message_for_SPDB()
 {
 	ui.label_printStatus->clear();
-	ui.label_summary->clear();
+	
 	if (!m_orbitShorestLink.get_shortest_paths().empty())
 	{
 		string msgForSPDB = generate_status_message_for_SPDB();
@@ -200,7 +200,7 @@ void COOPViewer::update_status_message_for_SPDB()
 void COOPViewer::update_status_message_for_eval_safety()
 {
 	ui.label_printStatus->clear();
-	ui.label_summary->clear();
+	
 	if (true)
 	{
 		string msgForSPDB = generate_status_message_for_eval_safety();
@@ -307,13 +307,21 @@ void COOPViewer::update_PPDB_n_TPDB_table_Q1()
 	summary += to_string(n_RSOs);
 	summary += "\n";
 	summary += "Query elapsed time: ";
-
+	
 	std::ostringstream out;
 	out.precision(3);
 	out << std::fixed << result;
 
 	summary += out.str();
 	summary += "sec";
+
+	summary += "\n";
+	summary += "#PPDB: ";
+	summary += string(to_string(m_mapFromPPDBRowToTCAReport.size()));
+	summary += "\n";
+	summary += "#TPDB: ";
+	summary += string(to_string(m_mapFromTPDBRowToReport.size()));
+	summary += "\n";
 	ui.label_summary->setText(QString::fromStdString(summary));
 }
 
@@ -343,6 +351,13 @@ void COOPViewer::update_PPDB_n_TPDB_table_Q2()
 
 	summary += out.str();
 	summary += "sec";
+	summary += "\n";
+	summary += "#PPDB: ";
+	summary += string(to_string(m_mapFromPPDBRowToTCAReport.size()));
+	summary += "\n";
+	summary += "#TPDB: ";
+	summary += string(to_string(m_mapFromTPDBRowToReport.size()));
+	summary += "\n";
 	ui.label_summary->setText(QString::fromStdString(summary));
 }
 
@@ -713,7 +728,6 @@ void COOPViewer::update_PPDB_selection_in_table(QModelIndex selectedRow)
 }
 
 
-
 void COOPViewer::update_TPDB_selection_in_table(QModelIndex selectedRow)
 {
 	m_mode = COOP_OPERATION_MODE::TPDB;
@@ -740,24 +754,24 @@ void COOPViewer::mode_selection_changed()
 	if (ui.radioButton_selectPPDB->isChecked())
 	{
 		m_mode = COOP_OPERATION_MODE::PPDB;
-
+		ui.label_summary->clear();
 	}
 	else if (ui.radioButton_selectTPDB->isChecked())
 	{
 		m_mode = COOP_OPERATION_MODE::TPDB;
-
+		ui.label_summary->clear();
 	}
 
 	else if (ui.radioButton_selectSPDB->isChecked())
 	{
 		m_mode = COOP_OPERATION_MODE::SPDB;
-
+		ui.label_summary->clear();
 	}
 
 	else if (ui.radioButton_selectSafetyEval->isChecked())
 	{
 		m_mode = COOP_OPERATION_MODE::EVAL_SAFETY;
-
+		ui.label_summary->clear();
 	}
 
 	update_status_message();
