@@ -233,7 +233,7 @@
                <item>
                 <widget class="QLabel" name="label_2">
                  <property name="text">
-                  <string>Time step</string>
+                  <string>Play speed</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -305,7 +305,7 @@
           <item>
            <widget class="QGroupBox" name="groupBox_3">
             <property name="title">
-             <string>COOP Mode</string>
+             <string>COOP Queries</string>
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_6">
              <item>
@@ -328,14 +328,14 @@
              <item>
               <widget class="QRadioButton" name="radioButton_selectSPDB">
                <property name="text">
-                <string>Shortest Path</string>
+                <string>Q3</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QRadioButton" name="radioButton_selectSafetyEval">
                <property name="text">
-                <string>Safety Evaluation</string>
+                <string>Q4</string>
                </property>
               </widget>
              </item>
