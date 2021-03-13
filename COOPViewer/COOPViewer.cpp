@@ -8,6 +8,8 @@
 #include <sstream>
 #include <time.h>
 #include <sstream>
+
+
 COOPViewer::COOPViewer(QWidget* parent)
 	: QMainWindow(parent), m_simulationTimer(this)
 {
@@ -130,6 +132,9 @@ void COOPViewer::update_status_message()
 	case COOP_OPERATION_MODE::EVAL_SAFETY:
 		update_status_message_for_eval_safety();
 		break;
+	case COOP_OPERATION_MODE::CLOSESTNEIGHBORS:
+		update_status_message_for_CN();
+		break;
 	default:
 		break;
 	}
@@ -140,7 +145,6 @@ void COOPViewer::update_status_message()
 void COOPViewer::update_status_message_for_PPDB()
 {
 	ui.label_printStatus->clear();
-	
 	if (m_manager.get_objectOfInterestIDs()->size() == 2)
 	{
 		string msgForPPDB = generate_status_message_for_PPDB();
@@ -210,6 +214,19 @@ void COOPViewer::update_status_message_for_eval_safety()
 	ui.q4Box->show();
 }
 
+void COOPViewer::update_status_message_for_CN()
+{
+	ui.label_printStatus->clear();
+
+	if (true)
+	{
+		string msgForCN = generate_status_message_for_CN();
+		ui.label_printStatus->setText(QString::fromStdString(msgForCN));
+	}
+	ui.ooiBox->hide();
+	ui.q4Box->hide();
+}
+
 
 
 void COOPViewer::add_PPDB_table_header()
@@ -227,12 +244,12 @@ void COOPViewer::add_PPDB_table_header()
 
 void COOPViewer::adjust_PPDB_column_width()
 {
-	ui.tableView_PPDBData->setColumnWidth(COL_PPDB_PRIMARY, 100);
-	ui.tableView_PPDBData->setColumnWidth(COL_PPDB_SECONDARY, 100);
+	ui.tableView_PPDBData->setColumnWidth(COL_PPDB_PRIMARY, 80);
+	ui.tableView_PPDBData->setColumnWidth(COL_PPDB_SECONDARY, 80);
 	ui.tableView_PPDBData->setColumnWidth(COL_PPDB_DCA, 100);
-	ui.tableView_PPDBData->setColumnWidth(COL_PPDB_TCA, 150);
-	ui.tableView_PPDBData->setColumnWidth(COL_PPDB_CASTART, 150);
-	ui.tableView_PPDBData->setColumnWidth(COL_PPDB_CAEND, 150);
+	ui.tableView_PPDBData->setColumnWidth(COL_PPDB_TCA, 180);
+	ui.tableView_PPDBData->setColumnWidth(COL_PPDB_CASTART, 180);
+	ui.tableView_PPDBData->setColumnWidth(COL_PPDB_CAEND, 180);
 }
 
 
@@ -377,11 +394,11 @@ void COOPViewer::add_TPDB_table_header()
 
 void COOPViewer::adjust_TPDB_column_width()
 {
-	ui.tableView_TPDBData->setColumnWidth(0, 100);
-	ui.tableView_TPDBData->setColumnWidth(1, 100);
-	ui.tableView_TPDBData->setColumnWidth(2, 100);
+	ui.tableView_TPDBData->setColumnWidth(0, 80);
+	ui.tableView_TPDBData->setColumnWidth(1, 80);
+	ui.tableView_TPDBData->setColumnWidth(2, 80);
 	ui.tableView_TPDBData->setColumnWidth(3, 100);
-	ui.tableView_TPDBData->setColumnWidth(4, 150);
+	ui.tableView_TPDBData->setColumnWidth(4, 180);
 }
 
 
@@ -400,7 +417,8 @@ void COOPViewer::update_TPDB_table()
 
 
 
-
+	
+	
 	for (auto& entity : m_manager.get_TPDB_infos())
 	{
 		if (m_queryIndex == 1 &&
@@ -502,13 +520,32 @@ string COOPViewer::generate_status_message_for_SPDB()
 
 string COOPViewer::generate_status_message_for_eval_safety()
 {
-
-
-	/// <summary>
-	/// SO WHAT
-	/// </summary>
-	/// <returns></returns>
 	return string();
+}
+
+string COOPViewer::generate_status_message_for_CN()
+{
+	const std::list<int> momentNClosestNeighborRSOsID = m_orbitClosestNeighbor.find_closest_neighbor_RSOs_ID_in_closest_moment(m_currentTime);
+	std::vector<rg_Point3D> closestNeighborCoords;
+	std::vector<int> RSOsID;
+	std::vector<double> distances;
+	rg_Point3D targetRSO = m_manager.find_RSO_from_ID(40536)->get_coord();
+	for (auto& RSOID : momentNClosestNeighborRSOsID)
+	{
+		MinimalRSO* currRSO = m_manager.find_RSO_from_ID(RSOID);
+		distances.push_back(currRSO->get_coord().distance(targetRSO));
+		RSOsID.push_back(RSOID);
+	}
+
+
+	stringstream message;
+	message << "Target RSO: ARIRANG 3A (40536)" << "\n"
+		<< "Neighbor #1: " << RSOsID[0] << " / " << distances[0] << "\n"
+		<< "Neighbor #2: " << RSOsID[1] << " / " << distances[1] << "\n"
+		<< "Neighbor #3: " << RSOsID[2] << " / " << distances[2] << "\n"
+		<< "Neighbor #4: " << RSOsID[3] << " / " << distances[3] << "\n"
+		<< "Neighbor #5: " << RSOsID[4] << " / " << distances[4] << endl;
+	return message.str();
 }
 
 
@@ -560,7 +597,11 @@ void COOPViewer::load_prediction_command()
 	
 	char cwd[1024];
 	_getcwd(cwd, sizeof(cwd));
-	string s_cwd(cwd);
+
+	for (int i = 0; i < 25; ++i)
+		filePath.pop_back();
+
+	string s_cwd(filePath);
 	m_manager.load_PPDB(s_cwd + string("\\result\\PPDB.txt"));
 	update_PPDB_table();
 	m_manager.load_TPDB(s_cwd + string("\\result\\TPDB.txt"));
@@ -575,16 +616,19 @@ void COOPViewer::load_prediction_command()
 
 	m_orbitTunnel_B.load_orbit_tunnel2(s_cwd + string("\\result\\SEDB_B.txt"));
 	ui.openglWidget->set_orbit_tunnel_B(&m_orbitTunnel_B);
-	ui.openglWidget->update();
+	
 
 	m_orbitTunnel_C.load_orbit_tunnel2(s_cwd + string("\\result\\SEDB_C.txt"));
 	ui.openglWidget->set_orbit_tunnel_C(&m_orbitTunnel_C);
-	ui.openglWidget->update();
+	
 	
 	m_orbitTunnel_N.load_orbit_tunnel2(s_cwd + string("\\result\\SEDB_N.txt"));
 	ui.openglWidget->set_orbit_tunnel_N(&m_orbitTunnel_N);
+	
+	 
+	m_orbitClosestNeighbor.load_orbit_closest_neighbors(s_cwd + string("\\result\\CNREPORT.txt"));
+	ui.openglWidget->set_orbit_closest_neighbor(&m_orbitClosestNeighbor);
 	ui.openglWidget->update();
-
 	update_time_info();
 	update();
 }
@@ -774,6 +818,15 @@ void COOPViewer::mode_selection_changed()
 		ui.label_summary->clear();
 	}
 
+	else if (ui.radioButton_selectCN->isChecked())
+	{
+		m_mode = COOP_OPERATION_MODE::CLOSESTNEIGHBORS;
+		ui.label_summary->clear();
+		
+		rg_Point3D targetRSO = m_manager.find_RSO_from_ID(40536)->get_coord();
+		ui.openglWidget->change_view_to_target_RSO(targetRSO);
+	}
+
 	update_status_message();
 	ui.openglWidget->change_view_to_OOI_direction();
 	ui.openglWidget->update();
@@ -796,3 +849,16 @@ void COOPViewer::space_center_selection_changed_Q4()
 	}
 	ui.openglWidget->update();
 }
+
+void COOPViewer::on_all_RSOs()
+{
+	ui.openglWidget->allRSOs =	ui.checkBox->isChecked();
+	ui.openglWidget->update();
+}
+
+void COOPViewer::on_criticial_RSOs()
+{
+	ui.openglWidget->ciriticRSOs = ui.checkBox_2->isChecked();
+	ui.openglWidget->update();
+}
+

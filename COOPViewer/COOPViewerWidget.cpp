@@ -4,6 +4,7 @@
 #include "MinimalRSO.h"
 #include "OrbitShortestLink.h"
 #include "OrbitTunnel.h"
+#include "OrbitClosestNeighbor.h"
 
 COOPViewerWidget::COOPViewerWidget(QWidget* parent)
 	: VDRCOpenGLWidget(parent)
@@ -20,16 +21,11 @@ void COOPViewerWidget::draw()
 {
 	//Drawing scale: 1/100
 
-	draw_sphere(rg_Point3D(0, 0, 0), 64, BLUE);
+	//draw_sphere(rg_Point3D(0, 0, 0), 64, BLUE);
+	draw_texture_sphere(rg_Point3D(0, 0, 0), 64, BLUE);
 
-	if (pManager != nullptr && pManager->get_RSOs().empty() == false)
-	{
-		for (auto& rso : pManager->get_RSOs())
-		{
-			rg_Point3D& coord = rso.get_coord();
-			draw_point(coord / 100, 5, GREEN);
-		}
-	}
+
+
 
 	if (pMode != nullptr)
 	{
@@ -47,6 +43,9 @@ void COOPViewerWidget::draw()
 		case COOP_OPERATION_MODE::EVAL_SAFETY:
 			draw_eval_safety();
 			break;
+		case COOP_OPERATION_MODE::CLOSESTNEIGHBORS:
+			draw_CN();
+			break;
 		default:
 			break;
 		}
@@ -55,8 +54,21 @@ void COOPViewerWidget::draw()
 
 
 
+void COOPViewerWidget::draw_total_RSOs()
+{
+	if (pManager != nullptr && pManager->get_RSOs().empty() == false)
+	{
+		for (auto& rso : pManager->get_RSOs())
+		{
+			rg_Point3D& coord = rso.get_coord();
+			draw_point(coord / 100, 5, GREEN);
+		}
+	}
+}
+
 void COOPViewerWidget::draw_PPDB()
 {
+	draw_total_RSOs();
 	if (pManager->get_objectOfInterestIDs()->empty() == false)
 		draw_line_among_OOIs();
 }
@@ -65,6 +77,7 @@ void COOPViewerWidget::draw_PPDB()
 
 void COOPViewerWidget::draw_TPDB()
 {
+	draw_total_RSOs();
 	if (pManager->get_objectOfInterestIDs()->empty() == false)
 		draw_circle_among_OOIs();
 }
@@ -113,6 +126,32 @@ void COOPViewerWidget::draw_SPDB()
 	}
 }
 
+void COOPViewerWidget::draw_CN()
+{
+	draw_total_RSOs();
+	if (pOrbitClosestNeighbor != nullptr)
+	{
+		const std::list<int> momentNClosestNeighborRSOsID = pOrbitClosestNeighbor->find_closest_neighbor_RSOs_ID_in_closest_moment(m_currentTime);
+		std::list<rg_Point3D> closestNeighborCoords;
+
+		for (auto& RSOID : momentNClosestNeighborRSOsID)
+		{
+			MinimalRSO* currRSO = pManager->find_RSO_from_ID(RSOID);
+			closestNeighborCoords.push_back(currRSO->get_coord());
+		}
+
+		rg_Point3D targetRSO = pManager->find_RSO_from_ID(pOrbitClosestNeighbor->m_momentNClosestNeighborRSOsID.back().targetRSOID)->get_coord();
+
+
+		draw_sphere(targetRSO / 100, 0.5, BLUE);
+		for (auto& rsoCoord : closestNeighborCoords)
+		{
+			draw_line(targetRSO / 100, rsoCoord / 100, 4, RED);
+			draw_sphere(rsoCoord / 100, 0.5, RED);
+		}
+	}
+}
+
 
 
 
@@ -131,7 +170,12 @@ void COOPViewerWidget::draw_eval_safety()
 
 	if (pOrbitTunnel != nullptr)
 	{
-		//draw_sphere(rg_Point3D(0, 0, 64), 1, RED);
+		
+		if (allRSOs)
+		{
+			draw_total_RSOs();
+		}
+
 		int index = 0;
 		for (const auto& orbit_tunnel : pOrbitTunnel->get_orbit_tunnels())
 		{
@@ -144,11 +188,15 @@ void COOPViewerWidget::draw_eval_safety()
 
 
 			std::list<rg_Point3D> tunnelCoord;
-			for (const auto& RSOID : orbit_tunnel.tunnelRSOsID)
+			if (ciriticRSOs)
 			{
-				MinimalRSO* currRSO = pManager->find_RSO_from_ID(RSOID);
-				draw_point(currRSO->get_coord() / 100, 9, RED);
+				for (const auto& RSOID : orbit_tunnel.tunnelRSOsID)
+				{
+					MinimalRSO* currRSO = pManager->find_RSO_from_ID(RSOID);
+					draw_point(currRSO->get_coord() / 100, 9, RED);
+				}
 			}
+			
 
 			for (const auto& face : orbit_tunnel.boundaryFaces)
 			{
@@ -253,3 +301,11 @@ void COOPViewerWidget::change_view_to_OOI_direction()
 	set_eye_direction(center);
 	
 }
+
+void COOPViewerWidget::change_view_to_target_RSO(rg_Point3D center)
+{
+	center.normalize();
+	set_eye_direction(center);
+}
+
+

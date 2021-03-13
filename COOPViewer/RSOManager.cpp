@@ -7,6 +7,7 @@
 #include <iostream>
 #include <sstream>
 #include <QString>
+#include <cTle.h>
 
 void RSOManager::clear()
 {
@@ -189,7 +190,6 @@ void RSOManager::load_two_line_element_set_file(const string& filePath, const in
 			firstLine = firstLine.substr(pos + delimiter.length());
 			cTle tleSGP4(firstLine, secondLine, thirdLine);
 			cSatellite satSGP4(tleSGP4);
-
 			char c_secondLine[130];
 			char c_thirdLine[130];
 

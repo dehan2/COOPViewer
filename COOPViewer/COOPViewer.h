@@ -7,12 +7,15 @@
 #include "RSOManager.h"
 #include "OrbitShortestLink.h"
 #include "OrbitTunnel.h"
+#include "OrbitClosestNeighbor.h"
 #include <QTimer>
 #include <QStandardItemModel>
 #include <map>
 #include <string>
 #include <vector>
+#include <list>
 
+using std::list;
 using std::vector;
 
 class COOPViewer : public QMainWindow
@@ -24,6 +27,7 @@ public:
     RSOManager m_manager;
     RSOManager m_starlinkManager;
     OrbitShortestLink m_orbitShorestLink;
+    OrbitClosestNeighbor m_orbitClosestNeighbor;
     
     
     OrbitTunnel m_orbitTunnel_B;
@@ -61,6 +65,7 @@ public:
     void update_status_message_for_TPDB();
     void update_status_message_for_SPDB();
     void update_status_message_for_eval_safety();
+    void update_status_message_for_CN();
 
     void add_PPDB_table_header();
     void adjust_PPDB_column_width();
@@ -80,6 +85,7 @@ public:
     string generate_status_message_for_TPDB();
     string generate_status_message_for_SPDB();
     string generate_status_message_for_eval_safety();
+    string generate_status_message_for_CN();
 
     void change_mode_selection();
 
@@ -116,4 +122,8 @@ public slots:
 
     void update_PPDB_n_TPDB_table_Q1();
     void update_PPDB_n_TPDB_table_Q2();
+
+    void on_all_RSOs();
+    void on_criticial_RSOs();
+
 };

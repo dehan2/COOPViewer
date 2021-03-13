@@ -135,9 +135,16 @@
                    <minute>0</minute>
                    <second>0</second>
                    <year>2021</year>
-                   <month>2</month>
-                   <day>16</day>
+                   <month>3</month>
+                   <day>6</day>
                   </datetime>
+                 </property>
+                 <property name="date">
+                  <date>
+                   <year>2021</year>
+                   <month>3</month>
+                   <day>6</day>
+                  </date>
                  </property>
                  <property name="displayFormat">
                   <string>MM-dd-yyyy hh:mm:ss</string>
@@ -307,8 +314,8 @@
             <property name="title">
              <string>COOP Queries</string>
             </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_6">
-             <item>
+            <layout class="QFormLayout" name="formLayout">
+             <item row="0" column="0">
               <widget class="QRadioButton" name="radioButton_selectPPDB">
                <property name="text">
                 <string>PPDB</string>
@@ -318,24 +325,31 @@
                </property>
               </widget>
              </item>
-             <item>
+             <item row="0" column="1">
               <widget class="QRadioButton" name="radioButton_selectTPDB">
                <property name="text">
                 <string>TPDB</string>
                </property>
               </widget>
              </item>
-             <item>
+             <item row="1" column="0">
               <widget class="QRadioButton" name="radioButton_selectSPDB">
                <property name="text">
-                <string>Q3</string>
+                <string>Q3 [Shortest Path]</string>
                </property>
               </widget>
              </item>
-             <item>
+             <item row="1" column="1">
               <widget class="QRadioButton" name="radioButton_selectSafetyEval">
                <property name="text">
-                <string>Q4</string>
+                <string>Q4 [Safety Evaluation]</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QRadioButton" name="radioButton_selectCN">
+               <property name="text">
+                <string>Q* [Closest Neighbors]</string>
                </property>
               </widget>
              </item>
@@ -434,8 +448,8 @@
             <property name="title">
              <string>Q4. [Select Space Center]</string>
             </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_7">
-             <item>
+            <layout class="QGridLayout" name="gridLayout_4">
+             <item row="0" column="1">
               <widget class="QRadioButton" name="q4_n">
                <property name="text">
                 <string>나로 우주센터</string>
@@ -445,17 +459,37 @@
                </property>
               </widget>
              </item>
-             <item>
+             <item row="0" column="3">
+              <widget class="QRadioButton" name="q4_c">
+               <property name="text">
+                <string>Cape Canaveral</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
               <widget class="QRadioButton" name="q4_b">
                <property name="text">
                 <string>Boca Chica</string>
                </property>
               </widget>
              </item>
-             <item>
-              <widget class="QRadioButton" name="q4_c">
+             <item row="1" column="1">
+              <widget class="QCheckBox" name="checkBox">
                <property name="text">
-                <string>Cape Canaveral</string>
+                <string>All RSOs</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QCheckBox" name="checkBox_2">
+               <property name="text">
+                <string>Critical RSOs</string>
+               </property>
+               <property name="checked">
+                <bool>false</bool>
                </property>
               </widget>
              </item>
@@ -630,6 +664,10 @@
    <class>COOPViewerWidget</class>
    <extends>QOpenGLWidget</extends>
    <header location="global">COOPViewerWidget.h</header>
+   <slots>
+    <slot>on_all_RSOs()</slot>
+    <slot>on_ciritical_RSOs()</slot>
+   </slots>
   </customwidget>
  </customwidgets>
  <resources>
@@ -643,7 +681,7 @@
    <slot>load_prediction_command()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>972</x>
+     <x>955</x>
      <y>117</y>
     </hint>
     <hint type="destinationlabel">
@@ -755,7 +793,7 @@
    <slot>go_to_start_moment()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>810</x>
+     <x>782</x>
      <y>210</y>
     </hint>
     <hint type="destinationlabel">
@@ -787,7 +825,7 @@
    <slot>mode_selection_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>806</x>
+     <x>772</x>
      <y>293</y>
     </hint>
     <hint type="destinationlabel">
@@ -803,7 +841,7 @@
    <slot>mode_selection_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>867</x>
+     <x>1097</x>
      <y>293</y>
     </hint>
     <hint type="destinationlabel">
@@ -819,8 +857,8 @@
    <slot>mode_selection_changed()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>971</x>
-     <y>293</y>
+     <x>846</x>
+     <y>315</y>
     </hint>
     <hint type="destinationlabel">
      <x>1107</x>
@@ -836,7 +874,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>1097</x>
-     <y>293</y>
+     <y>315</y>
     </hint>
     <hint type="destinationlabel">
      <x>1111</x>
@@ -884,7 +922,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>1087</x>
-     <y>454</y>
+     <y>498</y>
     </hint>
     <hint type="destinationlabel">
      <x>1108</x>
@@ -900,7 +938,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>1087</x>
-     <y>533</y>
+     <y>577</y>
     </hint>
     <hint type="destinationlabel">
      <x>1028</x>
@@ -915,8 +953,8 @@
    <slot>update_PPDB_n_TPDB_table_Q1()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1055</x>
-     <y>446</y>
+     <x>1087</x>
+     <y>498</y>
     </hint>
     <hint type="destinationlabel">
      <x>1124</x>
@@ -931,8 +969,8 @@
    <slot>update_PPDB_n_TPDB_table_Q2()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1062</x>
-     <y>528</y>
+     <x>1087</x>
+     <y>577</y>
     </hint>
     <hint type="destinationlabel">
      <x>1128</x>
@@ -947,8 +985,8 @@
    <slot>space_center_selection_changed_Q4()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>787</x>
-     <y>587</y>
+     <x>840</x>
+     <y>641</y>
     </hint>
     <hint type="destinationlabel">
      <x>1129</x>
@@ -963,8 +1001,8 @@
    <slot>space_center_selection_changed_Q4()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>926</x>
-     <y>587</y>
+     <x>968</x>
+     <y>641</y>
     </hint>
     <hint type="destinationlabel">
      <x>1129</x>
@@ -979,12 +1017,60 @@
    <slot>space_center_selection_changed_Q4()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1019</x>
-     <y>590</y>
+     <x>1097</x>
+     <y>641</y>
     </hint>
     <hint type="destinationlabel">
      <x>1123</x>
      <y>696</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>radioButton_selectCN</sender>
+   <signal>clicked()</signal>
+   <receiver>COOPViewerClass</receiver>
+   <slot>mode_selection_changed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>820</x>
+     <y>332</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1125</x>
+     <y>396</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox</sender>
+   <signal>clicked()</signal>
+   <receiver>COOPViewerClass</receiver>
+   <slot>on_all_RSOs()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>744</x>
+     <y>654</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>796</x>
+     <y>742</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkBox_2</sender>
+   <signal>clicked()</signal>
+   <receiver>COOPViewerClass</receiver>
+   <slot>on_criticial_RSOs()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>870</x>
+     <y>654</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>932</x>
+     <y>743</y>
     </hint>
    </hints>
   </connection>
@@ -1009,5 +1095,7 @@
   <slot>update_PPDB_n_TPDB_table_Q1()</slot>
   <slot>update_PPDB_n_TPDB_table_Q2()</slot>
   <slot>space_center_selection_changed_Q4()</slot>
+  <slot>on_all_RSOs()</slot>
+  <slot>on_criticial_RSOs()</slot>
  </slots>
 </ui>

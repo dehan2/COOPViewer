@@ -105,6 +105,14 @@ struct TCAReport
 	string tag;
 };
 
+struct TCAReport_less
+{
+	bool operator()(TCAReport const& a, TCAReport const& b) const
+	{
+		return a.distanceOfClosestApproach < b.distanceOfClosestApproach;
+	}
+};
+
 
 struct TPDBReport
 {
@@ -118,7 +126,13 @@ struct TPDBReport
 	float sec;
 };
 
-
+struct TPDBReport_less
+{
+	bool operator()(TPDBReport const& a, TPDBReport const& b) const
+	{
+		return a.minRadius < b.minRadius;
+	}
+};
 
 struct ErrorAnalysisReport
 {
@@ -162,5 +176,5 @@ const int COL_PPDB_CAEND = 5;
 
 enum class COOP_OPERATION_MODE
 {
-	PPDB, TPDB, SPDB, EVAL_SAFETY
+	PPDB, TPDB, SPDB, EVAL_SAFETY, CLOSESTNEIGHBORS
 };

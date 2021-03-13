@@ -95,9 +95,9 @@ const MomentNShortestLinkRSOsID* OrbitShortestLink::find_shortest_path_imminent_
 
 
 
-const std::list<int>& OrbitShortestLink::find_shortest_link_RSOs_ID_in_closest_moment(const double& targetMoment)
+const std::list<int> OrbitShortestLink::find_shortest_link_RSOs_ID_in_closest_moment(const double& targetMoment)
 {
-	std::list<int>& lastshortestLinkRSOsID = m_momentNShortestLinkRSOsID.front().shortestLinkRSOsID;
+	std::list<int> lastshortestLinkRSOsID = m_momentNShortestLinkRSOsID.front().shortestLinkRSOsID;
 	for (const auto& momentNShortestLinkRSOsID : m_momentNShortestLinkRSOsID)
 	{
 		if (momentNShortestLinkRSOsID.moment < targetMoment)

@@ -47,8 +47,14 @@ public:
 	list<MinimalRSO>& get_RSOs() { return m_RSOs; }
 	inline const cJulian& get_epoch() { return m_startMomentOfPredictionTimeWindow; }
 	const PredictionCommand& get_prediction_command() { return m_command; }
-	const list<TCAReport>& get_PPDB_infos() { return m_PPDBInfos; }
-	const list<TPDBReport>& get_TPDB_infos() { return m_TPDBInfos; }
+	const list<TCAReport>& get_PPDB_infos() { 
+		m_PPDBInfos.sort(TCAReport_less());
+		return m_PPDBInfos; 
+	}
+	const list<TPDBReport>& get_TPDB_infos() { 
+		m_TPDBInfos.sort(TPDBReport_less());
+		return m_TPDBInfos;
+	}
 
 
 	list<int>* get_objectOfInterestIDs() { return &m_objectOfInterestIDs; }
